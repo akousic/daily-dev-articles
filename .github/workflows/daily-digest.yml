@@ -40,4 +40,6 @@ jobs:
             exit 0
           fi
           git commit -m "chore: daily digest $(date -u +%F)"
-          git push
+          # avoid non-fast-forward failures if main changed during run
+          git pull --rebase origin main || true
+          git push origin HEAD:main
