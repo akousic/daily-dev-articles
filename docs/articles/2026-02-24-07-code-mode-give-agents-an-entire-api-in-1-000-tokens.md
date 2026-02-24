@@ -1,9 +1,9 @@
 # Code Mode: give agents an entire API in 1,000 tokens
 
 - **Source:** Cloudflare
-- **Rank (today):** #8
+- **Rank (today):** #7
 - **Ranking metrics:** RSS curated source
-- **Published (UTC):** 2026-02-24 21:33
+- **Published (UTC):** 2026-02-24 21:38
 - **Original:** https://blog.cloudflare.com/code-mode-mcp/
 
 ## Summary

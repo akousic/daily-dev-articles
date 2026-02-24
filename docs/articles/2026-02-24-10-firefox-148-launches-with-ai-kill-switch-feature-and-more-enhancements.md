@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #10
-- **Ranking metrics:** HN score 442
+- **Ranking metrics:** HN score 443
 - **Published (UTC):** 2026-02-24 05:47
 - **Original:** https://serverhost.com/blog/firefox-148-launches-with-exciting-ai-kill-switch-feature-and-more-enhancements/
 
