@@ -1,8 +1,8 @@
 # Writing code is cheap now
 
 - **Source:** Hacker News
-- **Rank (today):** #8
-- **Ranking metrics:** HN score 333
+- **Rank (today):** #10
+- **Ranking metrics:** HN score 334
 - **Published (UTC):** 2026-02-23 17:20
 - **Original:** https://simonwillison.net/guides/agentic-engineering-patterns/code-is-cheap/
 

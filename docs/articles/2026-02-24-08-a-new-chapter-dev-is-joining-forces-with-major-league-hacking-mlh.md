@@ -1,7 +1,7 @@
 # A New Chapter: DEV is Joining Forces with Major League Hacking (MLH)
 
 - **Source:** Dev.to
-- **Rank (today):** #7
+- **Rank (today):** #8
 - **Ranking metrics:** reactions 386, comments 96
 - **Published (UTC):** 2026-02-18 14:10
 - **Original:** https://dev.to/devteam/a-new-chapter-dev-is-joining-forces-with-major-league-hacking-mlh-3kfd

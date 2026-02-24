@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import html
 import json
 import re
 import textwrap
@@ -250,8 +251,26 @@ def extract_summary(url: str) -> Dict[str, List[str] | str]:
     }
 
 
+def site_shell(title: str, body: str) -> str:
+    css = """
+:root { color-scheme: light dark; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; max-width: 920px; margin: 40px auto; padding: 0 16px; line-height: 1.6; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin: 14px 0; background: #fff; }
+.meta { color: #6b7280; font-size: 14px; }
+h1 { font-size: 32px; margin-bottom: 6px; }
+h2 { font-size: 20px; margin: 0 0 8px; }
+ul { margin-top: 8px; }
+.badge { display:inline-block; font-size:12px; border:1px solid #d1d5db; border-radius:999px; padding:2px 8px; margin-right:6px; }
+footer { margin-top: 32px; color:#6b7280; font-size: 13px; }
+"""
+    return f"<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>{css}</style></head><body>{body}</body></html>"
+
+
 def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
-    path = ARTICLES_DIR / f"{day}-{rank:02d}-{slugify(story['title'])}.md"
+    slug = slugify(story['title'])
+    path = ARTICLES_DIR / f"{day}-{rank:02d}-{slug}.md"
     md = f"""# {story['title']}
 
 - **Source:** {story['source']}
@@ -271,6 +290,23 @@ def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
         md += f"- {item}\n"
     md += "\n---\n_Auto-generated daily digest entry._\n"
     path.write_text(md, encoding="utf-8")
+
+    takeaways_html = "".join(f"<li>{html.escape(t)}</li>" for t in summary_data["takeaways"])
+    body = f"""
+    <a href=\"../index.html\">← Back to all digests</a>
+    <h1>{html.escape(story['title'])}</h1>
+    <p class=\"meta\"><span class=\"badge\">{html.escape(story['source'])}</span>Rank #{rank} · {html.escape(story['source_meta'])}</p>
+    <p class=\"meta\">Published: {story['published'].strftime('%Y-%m-%d %H:%M UTC')}</p>
+    <p><a href=\"{html.escape(story['url'])}\" target=\"_blank\" rel=\"noopener\">Open original article ↗</a></p>
+    <h2>Summary</h2>
+    <p>{html.escape(summary_data['summary'])}</p>
+    <h2>Key Takeaways</h2>
+    <ul>{takeaways_html}</ul>
+    <footer>Auto-generated daily digest entry.</footer>
+    """
+    html_path = ARTICLES_DIR / f"{day}-{rank:02d}-{slug}.html"
+    html_path.write_text(site_shell(story['title'], body), encoding="utf-8")
+
     return path
 
 
@@ -278,6 +314,7 @@ def update_daily_digest(day: str, articles: List[Dict]) -> None:
     digest_path = DOCS / f"{day}.md"
     md = f"# Daily Dev Articles — {day}\n\n"
     md += f"Top {len(articles)} software-development articles sourced from free channels (HN, Lobsters, Dev.to, Reddit, RSS).\n\n"
+    cards = []
     for a in articles:
         md += textwrap.dedent(
             f"""
@@ -290,8 +327,13 @@ def update_daily_digest(day: str, articles: List[Dict]) -> None:
 
             """
         )
+        article_html_path = a['article_path'].replace('.md', '.html').replace('./', './')
+        cards.append(f"<div class='card'><h2>{a['rank']}. <a href='{article_html_path}'>{html.escape(a['title'])}</a></h2><p class='meta'><span class='badge'>{html.escape(a['source'])}</span>{html.escape(a['score_text'])}</p><p>{html.escape(a['summary'])}</p><p><a href='{html.escape(a['url'])}' target='_blank' rel='noopener'>Original link ↗</a></p></div>")
     md += "\n---\nGenerated automatically by GitHub Actions.\n"
     digest_path.write_text(md, encoding="utf-8")
+
+    body = f"<a href='./index.html'>← Back to all digests</a><h1>Daily Dev Articles — {day}</h1><p class='meta'>Top {len(articles)} software-development articles from free sources.</p>{''.join(cards)}<footer>Generated automatically by GitHub Actions.</footer>"
+    (DOCS / f"{day}.html").write_text(site_shell(f"Daily Dev Articles — {day}", body), encoding='utf-8')
 
 
 def update_index() -> None:
@@ -310,6 +352,10 @@ def update_index() -> None:
         "",
     ]
     index_path.write_text("\n".join(lines), encoding="utf-8")
+
+    cards = "".join([f"<div class='card'><h2><a href='./{f.stem}.html'>{f.stem}</a></h2><p class='meta'>Daily top 10 software-dev stories.</p></div>" for f in daily_files[:30]])
+    body = "<h1>Daily Dev Articles</h1><p class='meta'>A professional daily digest of top software-development reads.</p>" + cards + "<footer>Sources: HN, Lobsters, Dev.to, Reddit, curated RSS.</footer>"
+    (DOCS / "index.html").write_text(site_shell("Daily Dev Articles", body), encoding='utf-8')
 
 
 def main() -> None:

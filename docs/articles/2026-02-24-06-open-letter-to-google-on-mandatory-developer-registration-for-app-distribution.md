@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #6
-- **Ranking metrics:** HN score 273
+- **Ranking metrics:** HN score 277
 - **Published (UTC):** 2026-02-24 17:21
 - **Original:** https://keepandroidopen.org/open-letter/
 
