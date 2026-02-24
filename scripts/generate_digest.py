@@ -19,7 +19,10 @@ ARTICLES_DIR = DOCS / "articles"
 
 HN_TOP_URL = "https://hacker-news.firebaseio.com/v0/topstories.json"
 HN_ITEM_URL = "https://hacker-news.firebaseio.com/v0/item/{id}.json"
-X_SEARCH_URL = "https://api.x.com/2/tweets/search/recent"
+X_SEARCH_URLS = [
+    "https://api.x.com/2/tweets/search/recent",
+    "https://api.twitter.com/2/tweets/search/recent",
+]
 
 HEADERS = {"User-Agent": "daily-dev-articles-bot/1.0"}
 
@@ -114,9 +117,12 @@ def fetch_hn_top(limit: int = 5) -> List[Dict]:
 
 
 def fetch_x_top(limit: int = 10) -> List[Dict]:
+    debug = os.environ.get("X_DEBUG", "").lower() in {"1", "true", "yes"}
     token = (Path(ROOT / ".x_token").read_text().strip() if (ROOT / ".x_token").exists() else "")
     token = token or os.environ.get("X_BEARER_TOKEN", "")
     if not token:
+        if debug:
+            print("[x] missing X_BEARER_TOKEN")
         return []
 
     query = os.environ.get(
@@ -132,8 +138,19 @@ def fetch_x_top(limit: int = 10) -> List[Dict]:
         "user.fields": "username,name",
     }
     headers = {"Authorization": f"Bearer {token}", **HEADERS}
-    r = requests.get(X_SEARCH_URL, params=params, headers=headers, timeout=25)
-    if r.status_code != 200:
+    r = None
+    for endpoint in X_SEARCH_URLS:
+        resp = requests.get(endpoint, params=params, headers=headers, timeout=25)
+        if resp.status_code == 200:
+            r = resp
+            if debug:
+                print(f"[x] success endpoint={endpoint}")
+            break
+        if debug:
+            body = (resp.text or "")[:300].replace("\n", " ")
+            print(f"[x] request failed endpoint={endpoint} status={resp.status_code} body={body}")
+
+    if r is None:
         return []
 
     payload = r.json()
