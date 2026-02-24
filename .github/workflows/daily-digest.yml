@@ -8,12 +8,19 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: daily-dev-digest-main
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,13 +41,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout main
+          git pull --rebase origin main
           git add docs
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
           git commit -m "chore: daily digest $(date -u +%F)"
-          # checkout is detached in Actions; rebase explicitly on remote main
-          git fetch origin main
-          git rebase origin/main || { git rebase --abort || true; echo "Rebase conflict, skipping push"; exit 0; }
-          git push origin HEAD:main
+          git pull --rebase origin main
+          git push origin main
