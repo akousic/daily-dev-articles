@@ -253,19 +253,29 @@ def extract_summary(url: str) -> Dict[str, List[str] | str]:
 
 def site_shell(title: str, body: str) -> str:
     css = """
-:root { color-scheme: light dark; }
-body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; max-width: 920px; margin: 40px auto; padding: 0 16px; line-height: 1.6; }
-a { color: #2563eb; text-decoration: none; }
-a:hover { text-decoration: underline; }
-.card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin: 14px 0; background: #fff; }
-.meta { color: #6b7280; font-size: 14px; }
-h1 { font-size: 32px; margin-bottom: 6px; }
-h2 { font-size: 20px; margin: 0 0 8px; }
-ul { margin-top: 8px; }
-.badge { display:inline-block; font-size:12px; border:1px solid #d1d5db; border-radius:999px; padding:2px 8px; margin-right:6px; }
-footer { margin-top: 32px; color:#6b7280; font-size: 13px; }
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
 """
-    return f"<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>{css}</style></head><body>{body}</body></html>"
+    return f"<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>{css}</style></head><body><div class='wrap'>{body}</div></body></html>"
 
 
 def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
@@ -293,15 +303,19 @@ def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
 
     takeaways_html = "".join(f"<li>{html.escape(t)}</li>" for t in summary_data["takeaways"])
     body = f"""
-    <a href=\"../index.html\">← Back to all digests</a>
-    <h1>{html.escape(story['title'])}</h1>
-    <p class=\"meta\"><span class=\"badge\">{html.escape(story['source'])}</span>Rank #{rank} · {html.escape(story['source_meta'])}</p>
-    <p class=\"meta\">Published: {story['published'].strftime('%Y-%m-%d %H:%M UTC')}</p>
-    <p><a href=\"{html.escape(story['url'])}\" target=\"_blank\" rel=\"noopener\">Open original article ↗</a></p>
-    <h2>Summary</h2>
-    <p>{html.escape(summary_data['summary'])}</p>
-    <h2>Key Takeaways</h2>
-    <ul>{takeaways_html}</ul>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>{html.escape(story['title'])}</h1>
+      <p class='meta'><span class='badge'>{html.escape(story['source'])}</span>Rank #{rank} · {html.escape(story['source_meta'])} · {story['published'].strftime('%Y-%m-%d %H:%M UTC')}</p>
+      <div class='actions'><a href='{html.escape(story['url'])}' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>{html.escape(summary_data['summary'])}</p>
+      <h2>Key Takeaways</h2>
+      <ul>{takeaways_html}</ul>
+    </div>
     <footer>Auto-generated daily digest entry.</footer>
     """
     html_path = ARTICLES_DIR / f"{day}-{rank:02d}-{slug}.html"
@@ -328,11 +342,11 @@ def update_daily_digest(day: str, articles: List[Dict]) -> None:
             """
         )
         article_html_path = a['article_path'].replace('.md', '.html').replace('./', './')
-        cards.append(f"<div class='card'><h2>{a['rank']}. <a href='{article_html_path}'>{html.escape(a['title'])}</a></h2><p class='meta'><span class='badge'>{html.escape(a['source'])}</span>{html.escape(a['score_text'])}</p><p>{html.escape(a['summary'])}</p><p><a href='{html.escape(a['url'])}' target='_blank' rel='noopener'>Original link ↗</a></p></div>")
+        cards.append(f"<article class='card'><h2>{a['rank']}. <a href='{article_html_path}'>{html.escape(a['title'])}</a></h2><p class='meta'><span class='badge'>{html.escape(a['source'])}</span>{html.escape(a['score_text'])}</p><p class='excerpt'>{html.escape(a['summary'])}</p><div class='actions'><a href='{article_html_path}'>Read summary</a><a href='{html.escape(a['url'])}' target='_blank' rel='noopener'>Original ↗</a></div></article>")
     md += "\n---\nGenerated automatically by GitHub Actions.\n"
     digest_path.write_text(md, encoding="utf-8")
 
-    body = f"<a href='./index.html'>← Back to all digests</a><h1>Daily Dev Articles — {day}</h1><p class='meta'>Top {len(articles)} software-development articles from free sources.</p>{''.join(cards)}<footer>Generated automatically by GitHub Actions.</footer>"
+    body = f"<div class='topbar'><a class='brand' href='./index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div><div class='hero'><a class='back' href='./index.html'>← All digests</a><h1>Daily Dev Articles — {day}</h1><p class='meta'>Top {len(articles)} software-development articles from free sources.</p></div><div class='grid'>{''.join(cards)}</div><footer>Generated automatically by GitHub Actions.</footer>"
     (DOCS / f"{day}.html").write_text(site_shell(f"Daily Dev Articles — {day}", body), encoding='utf-8')
 
 
@@ -353,8 +367,8 @@ def update_index() -> None:
     ]
     index_path.write_text("\n".join(lines), encoding="utf-8")
 
-    cards = "".join([f"<div class='card'><h2><a href='./{f.stem}.html'>{f.stem}</a></h2><p class='meta'>Daily top 10 software-dev stories.</p></div>" for f in daily_files[:30]])
-    body = "<h1>Daily Dev Articles</h1><p class='meta'>A professional daily digest of top software-development reads.</p>" + cards + "<footer>Sources: HN, Lobsters, Dev.to, Reddit, curated RSS.</footer>"
+    cards = "".join([f"<article class='card'><h2><a href='./{f.stem}.html'>{f.stem}</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./{f.stem}.html'>Open digest</a><a href='./{f.stem}.md'>Raw markdown</a></div></article>" for f in daily_files[:30]])
+    body = "<div class='topbar'><a class='brand' href='./index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div><div class='hero'><h1>Top Software Articles, Every Day</h1><p class='meta'>A clean dev.to-inspired reading experience built from free high-signal sources.</p></div><div class='grid'>" + cards + "</div><footer>Sources: HN, Lobsters, Dev.to, Reddit, curated RSS.</footer>"
     (DOCS / "index.html").write_text(site_shell("Daily Dev Articles", body), encoding='utf-8')
 
 

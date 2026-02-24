@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #5
-- **Ranking metrics:** HN score 374
+- **Ranking metrics:** HN score 376
 - **Published (UTC):** 2026-02-24 11:59
 - **Original:** https://fortune.com/2026/02/24/discord-peter-thiel-backed-persona-identity-verification-breach/
 

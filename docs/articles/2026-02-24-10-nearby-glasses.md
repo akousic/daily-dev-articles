@@ -1,8 +1,8 @@
 # Nearby Glasses
 
 - **Source:** Hacker News
-- **Rank (today):** #9
-- **Ranking metrics:** HN score 119
+- **Rank (today):** #10
+- **Ranking metrics:** HN score 126
 - **Published (UTC):** 2026-02-24 17:40
 - **Original:** https://github.com/yjeanrenaud/yj_nearbyglasses
 
