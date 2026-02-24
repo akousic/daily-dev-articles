@@ -5,6 +5,7 @@ import datetime as dt
 import json
 import os
 import re
+import sys
 import textwrap
 from pathlib import Path
 from typing import List, Dict
@@ -308,6 +309,7 @@ def update_index() -> None:
 
 def main() -> None:
     today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
+    require_x = os.environ.get("REQUIRE_X", "").lower() in {"1", "true", "yes"}
     DOCS.mkdir(parents=True, exist_ok=True)
     ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -317,6 +319,9 @@ def main() -> None:
     stories = fetch_x_top(limit=10)
     source_name = "X"
     if not stories:
+        if require_x:
+            print(json.dumps({"date": today, "error": "X source unavailable and REQUIRE_X=true"}, indent=2))
+            sys.exit(1)
         stories = fetch_hn_top(limit=5)
         source_name = "Hacker News (fallback)"
 

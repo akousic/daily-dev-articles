@@ -40,6 +40,7 @@ jobs:
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
           X_TECH_QUERY: ${{ vars.X_TECH_QUERY }}
           X_DEBUG: "true"
+          REQUIRE_X: "true"
         run: python scripts/generate_digest.py
 
       - name: Commit and push if changed
