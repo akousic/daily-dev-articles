@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "5 13 * * *" # 13:05 UTC (~8:05 AM ET standard)
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/daily-digest.yml"
+      - "scripts/generate_digest.py"
 
 permissions:
   contents: write
