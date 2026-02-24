@@ -43,6 +43,16 @@ jobs:
           REQUIRE_X: "true"
         run: python scripts/generate_digest.py
 
+      - name: Validate source is X
+        run: |
+          TODAY=$(date -u +%F)
+          FILE="docs/${TODAY}.md"
+          test -f "$FILE"
+          if grep -q "Hacker News (fallback)" "$FILE"; then
+            echo "Digest fell back to HN unexpectedly"
+            exit 1
+          fi
+
       - name: Commit and push if changed
         run: |
           set -euo pipefail
