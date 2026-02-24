@@ -3,7 +3,7 @@
 - **Source:** Cloudflare
 - **Rank (today):** #8
 - **Ranking metrics:** RSS curated source
-- **Published (UTC):** 2026-02-24 21:38
+- **Published (UTC):** 2026-02-24 21:40
 - **Original:** https://blog.cloudflare.com/ecdysis-rust-graceful-restarts/
 
 ## Summary

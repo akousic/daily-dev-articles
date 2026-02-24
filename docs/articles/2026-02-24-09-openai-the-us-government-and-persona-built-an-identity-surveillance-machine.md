@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #9
-- **Ranking metrics:** HN score 338
+- **Ranking metrics:** HN score 341
 - **Published (UTC):** 2026-02-24 18:23
 - **Original:** https://vmfunc.re/blog/persona/
 
