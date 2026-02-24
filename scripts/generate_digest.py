@@ -395,7 +395,7 @@ def update_index() -> None:
     index_path.write_text("\n".join(lines), encoding="utf-8")
 
     cards = "".join([f"<article class='card'><h2><a href='./{f.stem}.html'>{f.stem}</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./{f.stem}.html'>Open digest</a><a href='./{f.stem}.md'>Raw markdown</a></div></article>" for f in daily_files[:30]])
-    body = "<div class='topbar'><a class='brand' href='./index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div><div class='hero'><h1>Top Software Articles, Every Day</h1><p class='meta'>A clean dev.to-inspired reading experience built from free high-signal sources.</p></div><div class='grid'>" + cards + "</div><footer>Sources: HN, Lobsters, Dev.to, Reddit, curated RSS.</footer>"
+    body = "<div class='topbar'><a class='brand' href='./index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div><div class='hero'><h1>The Daily Software Digest</h1><p class='meta'>Handpicked engineering reads from trusted sources.</p></div><div class='grid'>" + cards + "</div><footer>Sources: HN, Lobsters, Dev.to, Reddit, curated RSS.</footer>"
     (DOCS / "index.html").write_text(site_shell("Daily Dev Articles", body), encoding='utf-8')
 
 
