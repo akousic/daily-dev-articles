@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #4
-- **Ranking metrics:** HN score 9
+- **Ranking metrics:** HN score 12
 - **Published (UTC):** 2026-02-23 08:53
 - **Original:** https://github.com/MdSadiqMd/AV-Chaos-Monkey
 - **HN discussion:** https://news.ycombinator.com/item?id=47119767
