@@ -269,12 +269,13 @@ def update_daily_digest(day: str, articles: List[Dict], source_name: str) -> Non
     md += f"Top {len(articles)} software-development articles sourced from **{source_name}**.\n\n"
 
     for a in articles:
+        x_line = f"- **X post:** {a['x_post_url']}\n" if a.get("x_post_url") else ""
         md += textwrap.dedent(
             f"""
             ## {a['rank']}. [{a['title']}]({a['article_path']})
 
             - **Original link:** {a['url']}
-            - **Ranking metrics:** {a['score_text']}
+            {x_line}- **Ranking metrics:** {a['score_text']}
             - **Quick summary:** {a['summary']}
 
             """
@@ -320,6 +321,7 @@ def main() -> None:
                 "score_text": story["source_meta"],
                 "summary": summary_data["summary"],
                 "article_path": f"./articles/{path.name}",
+                "x_post_url": story.get("x_post_url", ""),
             }
         )
 
