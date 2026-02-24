@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #1
-- **Ranking metrics:** HN score 1239
+- **Ranking metrics:** HN score 1240
 - **Published (UTC):** 2026-02-23 11:29
 - **Original:** https://ladybird.org/posts/adopting-rust/
 
