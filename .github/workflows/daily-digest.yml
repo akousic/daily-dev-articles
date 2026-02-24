@@ -49,14 +49,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Ensure we are on an up-to-date local main before creating a commit
           git checkout main
-          git fetch origin main
-          git reset --hard origin/main
-
-          # Regenerate against latest main to avoid stale-file rename churn
-          python scripts/generate_digest.py
-
           git add docs
           if git diff --cached --quiet; then
             echo "No changes"
@@ -65,7 +58,7 @@ jobs:
 
           git commit -m "chore: daily digest $(date -u +%F)"
 
-          # Retry push in case another run lands a commit between fetch and push
+          # Retry push in case another run lands a commit between commit and push
           for i in 1 2 3; do
             echo "Push attempt $i..."
             git fetch origin main
