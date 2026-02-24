@@ -1,8 +1,8 @@
 # Open Letter to Google on Mandatory Developer Registration for App Distribution
 
 - **Source:** Hacker News
-- **Rank (today):** #3
-- **Ranking metrics:** HN score 253
+- **Rank (today):** #4
+- **Ranking metrics:** HN score 258
 - **Published (UTC):** 2026-02-24 17:21
 - **Original:** https://keepandroidopen.org/open-letter/
 - **HN discussion:** https://news.ycombinator.com/item?id=47139765
