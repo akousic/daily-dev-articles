@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #2
-- **Ranking metrics:** HN score 71
+- **Ranking metrics:** HN score 73
 - **Published (UTC):** 2026-02-24 17:30
 - **Original:** https://github.com/huggingface/skills
 - **HN discussion:** https://news.ycombinator.com/item?id=47139902
