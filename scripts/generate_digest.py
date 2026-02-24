@@ -133,25 +133,36 @@ def fetch_x_top(limit: int = 10) -> List[Dict]:
     if debug:
         print(f"[x] query configured len={len(query)}")
 
-    params = {
-        "query": query,
-        "max_results": 100,
-        "tweet.fields": "created_at,public_metrics,author_id,entities",
-        "expansions": "author_id",
-        "user.fields": "username,name",
-    }
     headers = {"Authorization": f"Bearer {token}", **HEADERS}
     r = None
-    for endpoint in X_SEARCH_URLS:
-        resp = requests.get(endpoint, params=params, headers=headers, timeout=25)
-        if resp.status_code == 200:
-            r = resp
-            if debug:
-                print(f"[x] success endpoint={endpoint}")
-            break
+    tried = []
+    for q in [query, default_query]:
+        q = (q or "").strip()
+        if not q or q in tried:
+            continue
+        tried.append(q)
+        params = {
+            "query": q,
+            "max_results": 100,
+            "tweet.fields": "created_at,public_metrics,author_id,entities",
+            "expansions": "author_id",
+            "user.fields": "username,name",
+        }
         if debug:
-            body = (resp.text or "")[:300].replace("\n", " ")
-            print(f"[x] request failed endpoint={endpoint} status={resp.status_code} body={body}")
+            print(f"[x] trying query len={len(q)}")
+
+        for endpoint in X_SEARCH_URLS:
+            resp = requests.get(endpoint, params=params, headers=headers, timeout=25)
+            if resp.status_code == 200:
+                r = resp
+                if debug:
+                    print(f"[x] success endpoint={endpoint}")
+                break
+            if debug:
+                body = (resp.text or "")[:300].replace("\n", " ")
+                print(f"[x] request failed endpoint={endpoint} status={resp.status_code} body={body}")
+        if r is not None:
+            break
 
     if r is None:
         return []
