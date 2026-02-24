@@ -39,15 +39,37 @@ jobs:
 
       - name: Commit and push if changed
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Ensure we are on an up-to-date local main before creating a commit
           git checkout main
-          git pull --rebase origin main
+          git fetch origin main
+          git reset --hard origin/main
+
+          # Regenerate against latest main to avoid stale-file rename churn
+          python scripts/generate_digest.py
+
           git add docs
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
+
           git commit -m "chore: daily digest $(date -u +%F)"
-          git pull --rebase origin main
-          git push origin main
+
+          # Retry push in case another run lands a commit between fetch and push
+          for i in 1 2 3; do
+            echo "Push attempt $i..."
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "Push failed after retries"
+          exit 1
