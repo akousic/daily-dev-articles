@@ -154,8 +154,12 @@ def fetch_x_top(limit: int = 10) -> List[Dict]:
         return []
 
     payload = r.json()
+    if debug and payload.get("errors"):
+        print(f"[x] payload errors={payload.get('errors')}")
     data = payload.get("data", [])
     includes = payload.get("includes", {})
+    if debug:
+        print(f"[x] posts fetched={len(data)}")
     users = {u["id"]: u for u in includes.get("users", [])}
 
     ranked: Dict[str, Dict] = {}
