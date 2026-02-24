@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 .x_token
 .env
+.vercel
+.env*.local
