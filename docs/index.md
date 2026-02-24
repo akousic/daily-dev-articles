@@ -6,6 +6,6 @@ Latest digests:
 
 ## About
 
-- Source: Hacker News
-- Count: 5 articles/day
+- Sources: HN, Lobsters, Dev.to, Reddit, curated RSS
+- Count: 10 articles/day
 - Format: one digest + individual markdown pages

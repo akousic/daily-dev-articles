@@ -5,8 +5,10 @@ import datetime as dt
 import json
 import re
 import textwrap
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List
+from urllib.parse import urlparse
 
 import requests
 import trafilatura
@@ -15,15 +17,53 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 ARTICLES_DIR = DOCS / "articles"
 
+HEADERS = {"User-Agent": "daily-dev-articles-bot/1.0"}
+
 HN_TOP_URL = "https://hacker-news.firebaseio.com/v0/topstories.json"
 HN_ITEM_URL = "https://hacker-news.firebaseio.com/v0/item/{id}.json"
-HEADERS = {"User-Agent": "daily-dev-articles-bot/1.0"}
+DEVTO_URL = "https://dev.to/api/articles?top=7"
+REDDIT_URLS = [
+    "https://www.reddit.com/r/programming/top.json?t=day&limit=15",
+    "https://www.reddit.com/r/webdev/top.json?t=day&limit=15",
+    "https://www.reddit.com/r/MachineLearning/top.json?t=day&limit=15",
+]
+RSS_SOURCES = [
+    ("Lobsters", "https://lobste.rs/rss"),
+    ("Cloudflare", "https://blog.cloudflare.com/rss/"),
+    ("Stripe", "https://stripe.com/blog/feed.rss"),
+    ("Vercel", "https://vercel.com/blog/rss.xml"),
+    ("InfoQ", "https://feed.infoq.com/"),
+    ("Changelog", "https://changelog.com/feed"),
+]
+
+
+def safe_get_json(url: str):
+    try:
+        return requests.get(url, headers=HEADERS, timeout=20).json()
+    except Exception:
+        return None
+
+
+def safe_get_text(url: str) -> str:
+    try:
+        return requests.get(url, headers=HEADERS, timeout=20).text
+    except Exception:
+        return ""
 
 
 def slugify(text: str) -> str:
     text = text.lower().strip()
     text = re.sub(r"[^a-z0-9]+", "-", text)
     return text.strip("-")[:80] or "article"
+
+
+def canonicalize_url(url: str) -> str:
+    try:
+        p = urlparse(url)
+        host = (p.netloc or "").lower().replace("www.", "")
+        return f"{p.scheme}://{host}{p.path}".rstrip("/")
+    except Exception:
+        return url
 
 
 def split_sentences(text: str) -> List[str]:
@@ -34,7 +74,6 @@ def split_sentences(text: str) -> List[str]:
 def is_dev_story(title: str, url: str) -> bool:
     text = f"{title} {url}".lower()
     tokens = set(re.findall(r"[a-z0-9+#.-]+", text))
-
     include_words = {
         "ai", "llm", "developer", "dev", "code", "coding", "python", "javascript",
         "rust", "go", "java", "typescript", "framework", "software", "api", "database",
@@ -42,77 +81,177 @@ def is_dev_story(title: str, url: str) -> bool:
         "engineering", "programming", "startup", "open-source", "machine", "learning",
     }
     exclude_words = {
-        "disney", "dog", "irs", "tax", "airport", "luggage", "celebrity", "sports",
-        "fashion", "movie", "music",
+        "celebrity", "sports", "fashion", "movie", "music", "politics",
     }
-
     if tokens & exclude_words:
         return False
-
-    trusted_dev_domains = (
-        "github.com", "gitlab.com", "stackoverflow.com", "dev.to", "arxiv.org",
-        "openai.com", "anthropic.com", "cloudflare.com", "stripe.com", "vercel.com",
+    return bool(tokens & include_words) or any(
+        d in url.lower() for d in ("github.com", "arxiv.org", "dev.to", "infoq.com")
     )
-    if any(d in url.lower() for d in trusted_dev_domains):
-        return True
-
-    return bool(tokens & include_words)
 
 
-def fetch_hn_top(limit: int = 5) -> List[Dict]:
-    ids = requests.get(HN_TOP_URL, headers=HEADERS, timeout=20).json()
-    stories = []
-    for sid in ids[: limit * 12]:
-        item = requests.get(HN_ITEM_URL.format(id=sid), headers=HEADERS, timeout=20).json()
+def parse_pub_date(raw: str | None) -> dt.datetime:
+    if not raw:
+        return dt.datetime.now(dt.timezone.utc)
+    for fmt in (
+        "%a, %d %b %Y %H:%M:%S %z",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%dT%H:%M:%SZ",
+    ):
+        try:
+            d = dt.datetime.strptime(raw, fmt)
+            return d if d.tzinfo else d.replace(tzinfo=dt.timezone.utc)
+        except Exception:
+            pass
+    return dt.datetime.now(dt.timezone.utc)
+
+
+def fetch_hn(limit: int = 20) -> List[Dict]:
+    out = []
+    ids = safe_get_json(HN_TOP_URL) or []
+    for sid in ids[: limit * 8]:
+        item = safe_get_json(HN_ITEM_URL.format(id=sid))
         if not item or item.get("type") != "story" or not item.get("url"):
             continue
-        url = item["url"]
-        if not is_dev_story(item.get("title", ""), url):
+        if not is_dev_story(item.get("title", ""), item["url"]):
             continue
-        stories.append(
+        out.append(
             {
-                "id": item["id"],
                 "title": item.get("title", "Untitled"),
-                "url": url,
-                "score": item.get("score", 0),
-                "author": item.get("by", "unknown"),
-                "published": dt.datetime.fromtimestamp(item.get("time", 0), dt.timezone.utc),
+                "url": item["url"],
+                "score": float(item.get("score", 0)),
                 "source": "Hacker News",
                 "source_meta": f"HN score {item.get('score', 0)}",
-                "comments_url": f"https://news.ycombinator.com/item?id={item['id']}",
+                "published": dt.datetime.fromtimestamp(item.get("time", 0), dt.timezone.utc),
             }
         )
-        if len(stories) >= limit:
+        if len(out) >= limit:
             break
-    return stories[:limit]
+    return out
+
+
+def fetch_devto(limit: int = 12) -> List[Dict]:
+    out = []
+    arr = safe_get_json(DEVTO_URL)
+    if not isinstance(arr, list):
+        return out
+    for a in arr[:limit]:
+        title = a.get("title", "")
+        url = a.get("url", "")
+        if not url or not is_dev_story(title, url):
+            continue
+        reactions = a.get("positive_reactions_count", 0)
+        comments = a.get("comments_count", 0)
+        out.append(
+            {
+                "title": title,
+                "url": url,
+                "score": float(reactions + comments * 2),
+                "source": "Dev.to",
+                "source_meta": f"reactions {reactions}, comments {comments}",
+                "published": parse_pub_date(a.get("published_at", "")),
+            }
+        )
+    return out
+
+
+def fetch_reddit(limit_each: int = 12) -> List[Dict]:
+    out = []
+    for u in REDDIT_URLS:
+        data = safe_get_json(u)
+        if not data:
+            continue
+        for ch in (data.get("data", {}).get("children", [])[:limit_each]):
+            d = ch.get("data", {})
+            title = d.get("title", "")
+            url = d.get("url_overridden_by_dest") or d.get("url") or ""
+            if not url or not is_dev_story(title, url):
+                continue
+            score = int(d.get("score", 0))
+            comments = int(d.get("num_comments", 0))
+            out.append(
+                {
+                    "title": title,
+                    "url": url,
+                    "score": float(score + comments * 1.5),
+                    "source": f"Reddit ({d.get('subreddit','')})",
+                    "source_meta": f"score {score}, comments {comments}",
+                    "published": dt.datetime.fromtimestamp(d.get("created_utc", 0), dt.timezone.utc),
+                }
+            )
+    return out
+
+
+def fetch_rss(source_name: str, rss_url: str, limit: int = 10) -> List[Dict]:
+    out = []
+    xml_text = safe_get_text(rss_url)
+    if not xml_text:
+        return out
+    try:
+        root = ET.fromstring(xml_text)
+    except Exception:
+        return out
+
+    items = root.findall(".//item")[:limit] or root.findall(".//{http://www.w3.org/2005/Atom}entry")[:limit]
+    for item in items:
+        title = (item.findtext("title") or item.findtext("{http://www.w3.org/2005/Atom}title") or "").strip()
+        link = (item.findtext("link") or "").strip()
+        if not link:
+            atom_link = item.find("{http://www.w3.org/2005/Atom}link")
+            if atom_link is not None:
+                link = atom_link.attrib.get("href", "")
+        if not link or not is_dev_story(title, link):
+            continue
+        pub = item.findtext("pubDate") or item.findtext("{http://www.w3.org/2005/Atom}updated")
+        out.append(
+            {
+                "title": title,
+                "url": link,
+                "score": 20.0,
+                "source": source_name,
+                "source_meta": "RSS curated source",
+                "published": parse_pub_date(pub),
+            }
+        )
+    return out
+
+
+def normalize_and_rank(candidates: List[Dict], top_n: int = 10) -> List[Dict]:
+    if not candidates:
+        return []
+    now = dt.datetime.now(dt.timezone.utc)
+    max_score = max((c["score"] for c in candidates), default=1.0) or 1.0
+
+    dedup: Dict[str, Dict] = {}
+    for c in candidates:
+        key = canonicalize_url(c["url"])
+        age_hours = max((now - c["published"]).total_seconds() / 3600.0, 0.1)
+        recency = max(0.0, 1.0 - min(age_hours / 48.0, 1.0))
+        c["final_score"] = 0.75 * (c["score"] / max_score) + 0.25 * recency
+        if key not in dedup or c["final_score"] > dedup[key]["final_score"]:
+            dedup[key] = c
+
+    ranked = sorted(dedup.values(), key=lambda x: x["final_score"], reverse=True)
+    return ranked[:top_n]
 
 
 def extract_summary(url: str) -> Dict[str, List[str] | str]:
     downloaded = trafilatura.fetch_url(url)
     if not downloaded:
-        return {
-            "summary": "Could not extract article text automatically.",
-            "takeaways": ["Open the original article for full details."],
-        }
-
+        return {"summary": "Could not extract article text automatically.", "takeaways": ["Open original link."]}
     text = trafilatura.extract(downloaded, output_format="txt") or ""
     text = re.sub(r"\s+", " ", text).strip()
     if len(text) < 150:
-        return {
-            "summary": "Article text was too short for reliable extraction.",
-            "takeaways": ["Open the original article for full details."],
-        }
-
+        return {"summary": "Article text was too short for reliable extraction.", "takeaways": ["Open original link."]}
     sents = split_sentences(text)
-    summary = " ".join(sents[:3]) if sents else text[:350]
-    takeaways = sents[3:6] if len(sents) > 3 else ["Read the full article for deeper context and examples."]
-    return {"summary": summary, "takeaways": takeaways}
+    return {
+        "summary": " ".join(sents[:3]) if sents else text[:350],
+        "takeaways": sents[3:6] if len(sents) > 3 else ["Read full article for details."],
+    }
 
 
 def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
-    slug = slugify(story["title"])
-    path = ARTICLES_DIR / f"{day}-{rank:02d}-{slug}.md"
-
+    path = ARTICLES_DIR / f"{day}-{rank:02d}-{slugify(story['title'])}.md"
     md = f"""# {story['title']}
 
 - **Source:** {story['source']}
@@ -120,7 +259,6 @@ def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
 - **Ranking metrics:** {story['source_meta']}
 - **Published (UTC):** {story['published'].strftime('%Y-%m-%d %H:%M')}
 - **Original:** {story['url']}
-- **HN discussion:** {story.get('comments_url', '')}
 
 ## Summary
 
@@ -131,7 +269,6 @@ def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
 """
     for item in summary_data["takeaways"]:
         md += f"- {item}\n"
-
     md += "\n---\n_Auto-generated daily digest entry._\n"
     path.write_text(md, encoding="utf-8")
     return path
@@ -140,20 +277,19 @@ def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
 def update_daily_digest(day: str, articles: List[Dict]) -> None:
     digest_path = DOCS / f"{day}.md"
     md = f"# Daily Dev Articles — {day}\n\n"
-    md += f"Top {len(articles)} software-development articles sourced from **Hacker News**.\n\n"
-
+    md += f"Top {len(articles)} software-development articles sourced from free channels (HN, Lobsters, Dev.to, Reddit, RSS).\n\n"
     for a in articles:
         md += textwrap.dedent(
             f"""
             ## {a['rank']}. [{a['title']}]({a['article_path']})
 
             - **Original link:** {a['url']}
+            - **Source:** {a['source']}
             - **Ranking metrics:** {a['score_text']}
             - **Quick summary:** {a['summary']}
 
             """
         )
-
     md += "\n---\nGenerated automatically by GitHub Actions.\n"
     digest_path.write_text(md, encoding="utf-8")
 
@@ -164,7 +300,15 @@ def update_index() -> None:
     lines = ["# Daily Dev Articles", "", "Latest digests:", ""]
     for f in daily_files[:30]:
         lines.append(f"- [{f.stem}](./{f.name})")
-    lines += ["", "## About", "", "- Source: Hacker News", "- Count: 5 articles/day", "- Format: one digest + individual markdown pages", ""]
+    lines += [
+        "",
+        "## About",
+        "",
+        "- Sources: HN, Lobsters, Dev.to, Reddit, curated RSS",
+        "- Count: 10 articles/day",
+        "- Format: one digest + individual markdown pages",
+        "",
+    ]
     index_path.write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -172,29 +316,37 @@ def main() -> None:
     today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
     DOCS.mkdir(parents=True, exist_ok=True)
     ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
-
     for stale in ARTICLES_DIR.glob(f"{today}-*.md"):
         stale.unlink(missing_ok=True)
 
-    stories = fetch_hn_top(limit=5)
+    candidates: List[Dict] = []
+    candidates.extend(fetch_hn(limit=20))
+    candidates.extend(fetch_devto(limit=12))
+    candidates.extend(fetch_reddit(limit_each=10))
+    for name, url in RSS_SOURCES:
+        candidates.extend(fetch_rss(name, url, limit=8))
+
+    stories = normalize_and_rank(candidates, top_n=10)
+
     article_meta = []
     for i, story in enumerate(stories, start=1):
-        summary_data = extract_summary(story["url"])
-        path = write_article(today, i, story, summary_data)
+        summary = extract_summary(story["url"])
+        path = write_article(today, i, story, summary)
         article_meta.append(
             {
                 "rank": i,
                 "title": story["title"],
                 "url": story["url"],
+                "source": story["source"],
                 "score_text": story["source_meta"],
-                "summary": summary_data["summary"],
+                "summary": summary["summary"],
                 "article_path": f"./articles/{path.name}",
             }
         )
 
     update_daily_digest(today, article_meta)
     update_index()
-    print(json.dumps({"date": today, "count": len(article_meta), "source": "Hacker News"}, indent=2))
+    print(json.dumps({"date": today, "count": len(article_meta), "source": "free-multi-source"}, indent=2))
 
 
 if __name__ == "__main__":
