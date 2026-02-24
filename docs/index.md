@@ -6,6 +6,6 @@ Latest digests:
 
 ## About
 
-- Sources: Hacker News top stories
-- Count: 5 articles/day
+- Sources: X (preferred), fallback to Hacker News
+- Count: 10 articles/day from X, fallback 5 from HN
 - Format: one digest + individual markdown pages

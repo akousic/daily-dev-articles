@@ -1,9 +1,8 @@
 # HuggingFace Agent Skills
 
-- **Source:** Hacker News top stories
-- **Rank (today):** #4
-- **HN score:** 15
-- **Author on HN:** armcat
+- **Source:** Hacker News
+- **Rank (today):** #2
+- **Ranking metrics:** HN score 35
 - **Published (UTC):** 2026-02-24 17:30
 - **Original:** https://github.com/huggingface/skills
 - **HN discussion:** https://news.ycombinator.com/item?id=47139902

@@ -24,6 +24,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Generate digest
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          X_TECH_QUERY: ${{ vars.X_TECH_QUERY }}
         run: python scripts/generate_digest.py
 
       - name: Commit and push if changed

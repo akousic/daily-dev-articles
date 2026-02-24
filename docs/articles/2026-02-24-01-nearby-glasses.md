@@ -1,9 +1,8 @@
 # Nearby Glasses
 
-- **Source:** Hacker News top stories
-- **Rank (today):** #5
-- **HN score:** 14
-- **Author on HN:** zingerlio
+- **Source:** Hacker News
+- **Rank (today):** #1
+- **Ranking metrics:** HN score 50
 - **Published (UTC):** 2026-02-24 17:40
 - **Original:** https://github.com/yjeanrenaud/yj_nearbyglasses
 - **HN discussion:** https://news.ycombinator.com/item?id=47140042
