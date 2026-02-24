@@ -125,10 +125,13 @@ def fetch_x_top(limit: int = 10) -> List[Dict]:
             print("[x] missing X_BEARER_TOKEN")
         return []
 
-    query = os.environ.get(
-        "X_TECH_QUERY",
-        '(AI OR LLM OR "software engineering" OR programming OR devtools OR "open source") has:links -is:retweet lang:en',
-    )
+    default_query = '(AI OR LLM OR "software engineering" OR programming OR devtools OR "open source") has:links -is:retweet lang:en'
+    query = (os.environ.get("X_TECH_QUERY", "") or "").strip()
+    if not query:
+        query = default_query
+
+    if debug:
+        print(f"[x] query configured len={len(query)}")
 
     params = {
         "query": query,
