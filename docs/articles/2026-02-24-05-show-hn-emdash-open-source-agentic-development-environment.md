@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #5
-- **Ranking metrics:** HN score 33
+- **Ranking metrics:** HN score 34
 - **Published (UTC):** 2026-02-24 18:00
 - **Original:** https://github.com/generalaction/emdash
 - **HN discussion:** https://news.ycombinator.com/item?id=47140322
