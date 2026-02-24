@@ -122,6 +122,7 @@ def fetch_hn(limit: int = 20) -> List[Dict]:
                 "url": item["url"],
                 "score": float(item.get("score", 0)),
                 "source": "Hacker News",
+                "source_group": "Hacker News",
                 "source_meta": f"HN score {item.get('score', 0)}",
                 "published": dt.datetime.fromtimestamp(item.get("time", 0), dt.timezone.utc),
             }
@@ -149,6 +150,7 @@ def fetch_devto(limit: int = 12) -> List[Dict]:
                 "url": url,
                 "score": float(reactions + comments * 2),
                 "source": "Dev.to",
+                "source_group": "Dev.to",
                 "source_meta": f"reactions {reactions}, comments {comments}",
                 "published": parse_pub_date(a.get("published_at", "")),
             }
@@ -176,6 +178,7 @@ def fetch_reddit(limit_each: int = 12) -> List[Dict]:
                     "url": url,
                     "score": float(score + comments * 1.5),
                     "source": f"Reddit ({d.get('subreddit','')})",
+                    "source_group": "Reddit",
                     "source_meta": f"score {score}, comments {comments}",
                     "published": dt.datetime.fromtimestamp(d.get("created_utc", 0), dt.timezone.utc),
                 }
@@ -210,6 +213,7 @@ def fetch_rss(source_name: str, rss_url: str, limit: int = 10) -> List[Dict]:
                 "url": link,
                 "score": 20.0,
                 "source": source_name,
+                "source_group": "Lobsters" if source_name == "Lobsters" else "RSS",
                 "source_meta": "RSS curated source",
                 "published": parse_pub_date(pub),
             }
@@ -234,6 +238,29 @@ def normalize_and_rank(candidates: List[Dict], top_n: int = 10) -> List[Dict]:
 
     ranked = sorted(dedup.values(), key=lambda x: x["final_score"], reverse=True)
     return ranked[:top_n]
+
+
+def select_with_source_quotas(ranked: List[Dict], per_source: int = 2) -> List[Dict]:
+    buckets = ["Hacker News", "Lobsters", "Dev.to", "Reddit", "RSS"]
+    picked: List[Dict] = []
+
+    for bucket in buckets:
+        candidates = [r for r in ranked if r.get("source_group") == bucket]
+        picked.extend(candidates[:per_source])
+
+    # Backfill if some bucket had fewer than quota
+    if len(picked) < per_source * len(buckets):
+        seen = {canonicalize_url(p["url"]) for p in picked}
+        for r in ranked:
+            k = canonicalize_url(r["url"])
+            if k in seen:
+                continue
+            picked.append(r)
+            seen.add(k)
+            if len(picked) >= per_source * len(buckets):
+                break
+
+    return picked[: per_source * len(buckets)]
 
 
 def extract_summary(url: str) -> Dict[str, List[str] | str]:
@@ -327,7 +354,7 @@ def write_article(day: str, rank: int, story: Dict, summary_data: Dict) -> Path:
 def update_daily_digest(day: str, articles: List[Dict]) -> None:
     digest_path = DOCS / f"{day}.md"
     md = f"# Daily Dev Articles — {day}\n\n"
-    md += f"Top {len(articles)} software-development articles sourced from free channels (HN, Lobsters, Dev.to, Reddit, RSS).\n\n"
+    md += f"Top {len(articles)} software-development articles sourced from free channels (HN, Lobsters, Dev.to, Reddit, RSS), targeting 2 from each source.\n\n"
     cards = []
     for a in articles:
         md += textwrap.dedent(
@@ -386,7 +413,8 @@ def main() -> None:
     for name, url in RSS_SOURCES:
         candidates.extend(fetch_rss(name, url, limit=8))
 
-    stories = normalize_and_rank(candidates, top_n=10)
+    ranked = normalize_and_rank(candidates, top_n=200)
+    stories = select_with_source_quotas(ranked, per_source=2)
 
     article_meta = []
     for i, story in enumerate(stories, start=1):

@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #2
-- **Ranking metrics:** HN score 417
+- **Ranking metrics:** HN score 420
 - **Published (UTC):** 2026-02-24 17:15
 - **Original:** https://www.calebleak.com/posts/dog-game/
 
