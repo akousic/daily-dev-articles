@@ -240,6 +240,20 @@ def normalize_and_rank(candidates: List[Dict], top_n: int = 10) -> List[Dict]:
     return ranked[:top_n]
 
 
+def recent_urls_from_digests(today: str, days_back: int = 2) -> set[str]:
+    seen: set[str] = set()
+    t = dt.date.fromisoformat(today)
+    for i in range(1, days_back + 1):
+        d = (t - dt.timedelta(days=i)).isoformat()
+        p = DOCS / f"{d}.md"
+        if not p.exists():
+            continue
+        txt = p.read_text(encoding="utf-8", errors="ignore")
+        for m in re.findall(r"- \*\*Original link:\*\*\s+(https?://\S+)", txt):
+            seen.add(canonicalize_url(m.strip()))
+    return seen
+
+
 def select_with_source_quotas(ranked: List[Dict], per_source: int = 2) -> List[Dict]:
     buckets = ["Hacker News", "Lobsters", "Dev.to", "Reddit", "RSS"]
     picked: List[Dict] = []
@@ -413,7 +427,9 @@ def main() -> None:
     for name, url in RSS_SOURCES:
         candidates.extend(fetch_rss(name, url, limit=8))
 
-    ranked = normalize_and_rank(candidates, top_n=200)
+    recent_urls = recent_urls_from_digests(today, days_back=2)
+    fresh_candidates = [c for c in candidates if canonicalize_url(c["url"]) not in recent_urls]
+    ranked = normalize_and_rank(fresh_candidates or candidates, top_n=200)
     stories = select_with_source_quotas(ranked, per_source=2)
 
     article_meta = []
