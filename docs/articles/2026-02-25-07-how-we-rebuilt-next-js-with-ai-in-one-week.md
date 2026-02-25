@@ -1,9 +1,9 @@
 # How we rebuilt Next.js with AI in one week
 
 - **Source:** Cloudflare
-- **Rank (today):** #5
+- **Rank (today):** #7
 - **Ranking metrics:** RSS curated source
-- **Published (UTC):** 2026-02-25 15:29
+- **Published (UTC):** 2026-02-25 15:39
 - **Original:** https://blog.cloudflare.com/vinext/
 
 ## Summary

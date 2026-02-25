@@ -1,8 +1,8 @@
 # Pi – A minimal terminal coding harness
 
 - **Source:** Hacker News
-- **Rank (today):** #1
-- **Ranking metrics:** HN score 492
+- **Rank (today):** #2
+- **Ranking metrics:** HN score 494
 - **Published (UTC):** 2026-02-24 21:53
 - **Original:** https://pi.dev
 

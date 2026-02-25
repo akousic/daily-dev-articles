@@ -1,8 +1,8 @@
 # Danish government agency to ditch Microsoft software (2025)
 
 - **Source:** Hacker News
-- **Rank (today):** #2
-- **Ranking metrics:** HN score 447
+- **Rank (today):** #1
+- **Ranking metrics:** HN score 456
 - **Published (UTC):** 2026-02-25 10:16
 - **Original:** https://therecord.media/denmark-digital-agency-microsoft-digital-independence
 
