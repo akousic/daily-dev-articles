@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Daily Dev Articles</title><style>
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Show HN: I ported Tree-sitter to Go</title><style>
 :root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
 @media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
 *{ box-sizing:border-box; }
@@ -20,4 +20,19 @@ a:hover{ text-decoration:underline; }
 .actions{ display:flex; gap:14px; font-size:14px; }
 footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
 .back{ font-size:14px; color:var(--muted); }
-</style></head><body><div class='wrap'><div class='topbar'><a class='brand' href='./index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div><div class='hero'><h1>The Daily Software Digest</h1><p class='meta'>Handpicked engineering reads from trusted sources.</p></div><div class='grid'><article class='card'><h2><a href='./2026-02-26.html'>2026-02-26</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-26.html'>Open digest</a><a href='./2026-02-26.md'>Raw markdown</a></div></article><article class='card'><h2><a href='./2026-02-25.html'>2026-02-25</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-25.html'>Open digest</a><a href='./2026-02-25.md'>Raw markdown</a></div></article><article class='card'><h2><a href='./2026-02-24.html'>2026-02-24</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-24.html'>Open digest</a><a href='./2026-02-24.md'>Raw markdown</a></div></article></div><footer>Sources: HN, Lobsters, Dev.to, Reddit, curated RSS.</footer></div></body></html>
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Show HN: I ported Tree-sitter to Go</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #9 · HN score 211 · 2026-02-25 18:28 UTC</p>
+      <div class='actions'><a href='https://github.com/odvcencio/gotreesitter' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Pure-Go tree-sitter runtime — no CGo, no C toolchain, WASM-ready. go get github.com/odvcencio/gotreesitter Implements the same parse-table format tree-sitter uses, so existing grammars work without recompilation. Outperforms the CGo binding on every workload — incremental edits (the dominant operation in editors and language servers) are 90x faster than the C implementation.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>Every existing Go tree-sitter binding requires CGo.</li><li>That means: - Cross-compilation breaks ( GOOS=wasip1 ,GOARCH=arm64 from Linux, Windows without MSYS2) - CI pipelines need a C toolchain in every build image go install fails for end users withoutgcc - Race detector, fuzzing, and coverage tools work poorly across the CGo boundary gotreesitter is pure Go.</li><li>go get and build — on any target, any platform.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
