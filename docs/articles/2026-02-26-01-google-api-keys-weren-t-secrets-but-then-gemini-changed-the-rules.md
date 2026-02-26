@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #1
-- **Ranking metrics:** HN score 937
+- **Ranking metrics:** HN score 939
 - **Published (UTC):** 2026-02-25 19:54
 - **Original:** https://trufflesecurity.com/blog/google-api-keys-werent-secrets-but-then-gemini-changed-the-rules
 

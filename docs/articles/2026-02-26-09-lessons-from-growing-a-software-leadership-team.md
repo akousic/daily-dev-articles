@@ -1,9 +1,9 @@
 # Lessons from Growing a Software Leadership Team
 
 - **Source:** InfoQ
-- **Rank (today):** #7
+- **Rank (today):** #9
 - **Ranking metrics:** RSS curated source
-- **Published (UTC):** 2026-02-26 14:55
+- **Published (UTC):** 2026-02-26 15:01
 - **Original:** https://www.infoq.com/news/2026/02/software-leadership-team/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global
 
 ## Summary

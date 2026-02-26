@@ -1,9 +1,9 @@
 # ASP.NET Core in .NET 11 Preview 1 Brings New Blazor Components, Improved Navigation, and WebAssembly
 
 - **Source:** InfoQ
-- **Rank (today):** #6
+- **Rank (today):** #8
 - **Ranking metrics:** RSS curated source
-- **Published (UTC):** 2026-02-26 14:55
+- **Published (UTC):** 2026-02-26 15:01
 - **Original:** https://www.infoq.com/news/2026/02/asp-net-core-11-preview1/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global
 
 ## Summary

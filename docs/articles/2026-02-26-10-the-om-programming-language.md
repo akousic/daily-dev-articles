@@ -1,8 +1,8 @@
 # The Om Programming Language
 
 - **Source:** Hacker News
-- **Rank (today):** #8
-- **Ranking metrics:** HN score 284
+- **Rank (today):** #10
+- **Ranking metrics:** HN score 285
 - **Published (UTC):** 2026-02-25 17:48
 - **Original:** https://www.om-language.com/
 
