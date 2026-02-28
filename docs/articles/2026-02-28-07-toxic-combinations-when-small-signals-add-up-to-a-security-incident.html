@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Daily Dev Articles</title><style>
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Toxic combinations: when small signals add up to a security incident</title><style>
 :root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
 @media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
 *{ box-sizing:border-box; }
@@ -20,4 +20,19 @@ a:hover{ text-decoration:underline; }
 .actions{ display:flex; gap:14px; font-size:14px; }
 footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
 .back{ font-size:14px; color:var(--muted); }
-</style></head><body><div class='wrap'><div class='topbar'><a class='brand' href='./index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div><div class='hero'><h1>The Daily Software Digest</h1><p class='meta'>Handpicked engineering reads from trusted sources.</p></div><div class='grid'><article class='card'><h2><a href='./2026-02-28.html'>2026-02-28</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-28.html'>Open digest</a><a href='./2026-02-28.md'>Raw markdown</a></div></article><article class='card'><h2><a href='./2026-02-27.html'>2026-02-27</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-27.html'>Open digest</a><a href='./2026-02-27.md'>Raw markdown</a></div></article><article class='card'><h2><a href='./2026-02-26.html'>2026-02-26</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-26.html'>Open digest</a><a href='./2026-02-26.md'>Raw markdown</a></div></article><article class='card'><h2><a href='./2026-02-25.html'>2026-02-25</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-25.html'>Open digest</a><a href='./2026-02-25.md'>Raw markdown</a></div></article><article class='card'><h2><a href='./2026-02-24.html'>2026-02-24</a></h2><p class='meta'>Daily top 10 software-dev stories.</p><div class='actions'><a href='./2026-02-24.html'>Open digest</a><a href='./2026-02-24.md'>Raw markdown</a></div></article></div><footer>Sources: HN, Lobsters, Dev.to, Reddit, curated RSS.</footer></div></body></html>
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Toxic combinations: when small signals add up to a security incident</h1>
+      <p class='meta'><span class='badge'>Cloudflare</span>Rank #7 · RSS curated source · 2026-02-28 14:30 UTC</p>
+      <div class='actions'><a href='https://blog.cloudflare.com/toxic-combinations-security/' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>At 3 AM, a single IP requested a login page. But then, across several hosts and paths, the same source began appending ?debug=true — the sign of an attacker probing the environment to assess the technology stack and plan a breach. Minor misconfigurations, overlooked firewall events, or request anomalies feel harmless on their own.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>But when these small signals converge, they can explode into security incidents known as “toxic combinations.” These are exploits where an attacker discovers and compounds many minor issues — such as a debug flag left on a web application or an unauthenticated application path — to breach systems or exfiltrate data.</li><li>Cloudflare’s network observes requests to your stack, and as a result, has the data to identify these toxic combinations as they form.</li><li>In this post, we’ll show you how we surface these signals from our application security data.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
