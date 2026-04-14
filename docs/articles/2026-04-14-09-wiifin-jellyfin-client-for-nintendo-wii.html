@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>WiiFin – Jellyfin Client for Nintendo Wii</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>WiiFin – Jellyfin Client for Nintendo Wii</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #9 · HN score 208 · 2026-04-13 23:33 UTC</p>
+      <div class='actions'><a href='https://github.com/fabienmillet/WiiFin' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Jellyfin client for the Nintendo Wii WiiFin is an experimental homebrew client for Jellyfin, built specifically for the Nintendo Wii. It provides a lightweight, console-friendly media browsing and playback experience, written in C++ using GRRLIB and MPlayer CE. 🚧 Experimental – functional but still under active development.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>Expect rough edges on real hardware.</li><li>- Authentication: login with username/password or via QuickConnect (approve on another device) - Saved profiles: multiple accounts stored securely (access token only, no password stored) - Library browsing: movies, TV shows, music libraries with cover art loaded from the server - Detail view: synopsis, rating, genres, cast, director, audio/subtitle track selection - Continue Watching and Next Up rows - TV shows: season and episode navigation - Video playback: server-side transcoding streamed through the integrated MPlayer CE engine - Music playback: audio libraries, album/track navigation - Player overlay: seek bar, volume control, next/prev episode, audio &amp; subtitle track switching, intro skip - Playback reporting: progress sent back to the Jellyfin server (resume where you left off) - HTTPS: TLS connections via mbedTLS (self-signed certificates supported) - Wiimote IR pointer and virtual on-screen keyboard - Background music on menus - Ships as a ready-to-use .dol and installable.wad (Wii / vWii) - Direct-play is not supported; all video is transcoded by the server - No 5.1 multi-channel audio (stereo only via transcoding) - Subtitle rendering relies on the server embedding them into the video stream - devkitPro with devkitPPC ,libogc , andwii-dev portlibs - Graphics: GRRLIB ,libpngu ,freetype ,libjpeg - mbedTLS (bundled under libs/ , cross-compiled automatically by the CI) - Optional: MPlayer CE compiled as libmplayer.a — required for video playback.</li><li>See MPLAYER_CE_BUILD.md for instructions.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
