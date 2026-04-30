@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Alignment whack-a-mole: Finetuning activates recall of copyrighted books in LLMs</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Alignment whack-a-mole: Finetuning activates recall of copyrighted books in LLMs</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #10 · HN score 179 · 2026-04-30 03:11 UTC</p>
+      <div class='actions'><a href='https://github.com/cauchy221/Alignment-Whack-a-Mole-Code' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Alignment Whack-a-Mole: Finetuning Activates Verbatim Recall of Copyrighted Books in Large Language Models The paper is now on arxiv and check out our demo! This repository contains the data preprocessing pipeline, finetuning scripts, memorization evaluation code, and analysis scripts for our paper. We provide partial example files in data/ containing a small subset of excerpts and generations from The Road by Cormac McCarthy.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>Full book content and model generations are not included because the books are copyrighted and the generations contain large portions of verbatim text.</li><li>We use uv for dependency management.</li><li>Install uv if you haven&#x27;t already: curl -LsSf https://astral.sh/uv/install.sh | sh Create a virtual environment and install all dependencies: uv venv --python 3.11 source .venv/bin/activate uv pip install html2text natsort ftfy openai tqdm nltk numpy For Gemini finetuning and generation, also install: uv pip install google-genai google-cloud-storage vertexai For DeepSeek finetuning and generation via Tinker, also install: uv pip install tinker tinker-cookbook datasets Set your Tinker API key (sign up at https://auth.thinkingmachines.ai/sign-up): export TINKER_API_KEY=&quot;your-key-here&quot; Set your OpenAI API key (required for preprocessing and GPT-4o finetuning/generation): export OPENAI_API_KEY=&quot;your-key-here&quot; Download the required NLTK data (one-time, for evaluation and analysis): import nltk nltk.download(&#x27;punkt_tab&#x27;) We assume you already have the EPUB file for each book.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
