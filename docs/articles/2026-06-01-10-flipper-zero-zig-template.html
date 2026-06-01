@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Flipper Zero Zig Template</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Flipper Zero Zig Template</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #10 · HN score 96 · 2026-06-01 13:20 UTC</p>
+      <div class='actions'><a href='https://github.com/NishantJoshi00/flipper-template' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>A modern, production-ready template for developing Flipper Zero applications using the Zig programming language. This project provides a streamlined build system that integrates Zig with the Flipper Zero SDK, enabling developers to write type-safe, memory-safe applications for the Flipper Zero platform. This template bridges Zig&#x27;s powerful build system and language features with the Flipper Zero firmware development kit.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>It handles the complex integration between Zig&#x27;s ARM Cortex-M4 cross-compilation and the Flipper SDK, providing a clean starting point for custom applications.</li><li>- Native Zig Support: Write Flipper applications entirely in Zig, leveraging its compile-time safety guarantees and C interoperability - Automated Build Pipeline: Seamless integration with ufbt (unofficial build tool) for packaging FAP files - Cross-Platform Development: Works on macOS, Linux, and other platforms supported by Zig - SDK Integration: Pre-configured include paths and compiler flags for the complete Flipper SDK (F7 target) - Interactive Setup: Guided initialization script to customize app metadata - Quick Launch: Built-in commands to build, package, and deploy to Flipper devices The template uses a two-stage build process: - Zig Build Stage: Compiles Zig source to ARM Cortex-M4 object files ( app.o )- Target: thumb architecture withcortex-m4 CPU model - ABI: eabihf (Embedded Application Binary Interface, Hard Float) - Optimization: ReleaseSmall for minimal binary size - Target: - UFBT Package Stage: Links object files with SDK and packages into .fap format- Handled by the official Flipper build toolchain - Produces deployable application packages - Zig: Version 0.15.1 or later (download) - UFBT: Unofficial Flipper Build Tool (installation guide) - Python 3: Required for running ufbt commands - Flipper Zero SDK: Automatically managed by ufbt (installed to~/.ufbt ) The template is pre-configured for ARM64 macOS with the ARM toolchain path: ~/.ufbt/toolchain/arm64-darwin/arm-none-eabi/include If you&#x27;re on a different platform, you may need to adjust the arm_libc_include path in build.zig:31 to match your toolchain location.</li><li>- Install UFBT: python3 -m pip install --upgrade ufbt ufbt update - Clone or Download This Template: git clone https://github.com/yourusername/flipper-template.git cd flipper-template - Initialize Your Project: zig build init This interactive script will prompt you for: - App ID (e.g., my_custom_app ) - Display name (shown in Flipper menu) - Description - Author name - GitHub repository URL - App ID (e.g., Compile the Zig source to an object file: zig build This creates zig-out/bin/app.o with all the compiled application code.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
