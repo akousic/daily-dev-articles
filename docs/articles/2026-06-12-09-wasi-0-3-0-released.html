@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>WASI 0.3.0 Released</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>WASI 0.3.0 Released</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #9 · HN score 158 · 2026-06-12 13:51 UTC</p>
+      <div class='actions'><a href='https://github.com/WebAssembly/WASI/releases/tag/v0.3.0' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>WASI 0.3.0 WASI 0.3 is official, and async is now native to WebAssembly Components. The WASI Subgroup voted to ratify WASI 0.3.0, rebasing WASI onto the WebAssembly Component Model&#x27;s async primitives. These are the detailed release notes, for a high-level overview read the announcement post.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>Most of the changes in the 0.3 interfaces are entirely mechanical.</li><li>WASI 0.2 had to perform some acrobatics to make async work, but now that async is native to the component model we can write the same things we did before but much more ergonomically.</li><li>Here is a overview of the patterns we were encoding in WASI 0.2 with the wasi:io package, and what those patterns now look like in 0.3 with Component Model async: | WASI 0.2 ( wasi:io) | WASI 0.3 (Component Model) | |---|---| | resource pollable | future&lt;T&gt; | | resource input-stream | stream&lt;u8&gt; | | resource output-stream | stream&lt;u8&gt;(written-to direction) | | poll(list&lt;pollable&gt;) | awaiton a future (runtime-handled) | | subscribe()on resource | return a future&lt;...&gt;from the call | | start-foo/finish-foo | foo: async func(...) | wasi:cli Structurally the files are the same (stdin.wit, stdout.wit, stderr.wit, run.wit, exit.wit, terminal.wit, environment.wit).</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
