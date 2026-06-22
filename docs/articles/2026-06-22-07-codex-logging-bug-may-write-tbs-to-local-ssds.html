@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Codex logging bug may write TBs to local SSDs</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Codex logging bug may write TBs to local SSDs</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #7 · HN score 357 · 2026-06-22 07:30 UTC</p>
+      <div class='actions'><a href='https://github.com/openai/codex/issues/28224' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Codex SQLite feedback logs can write ~640 TB/year and rapidly consume SSD endurance Issue Codex is continuously writing a large amount of data to the local SQLite feedback log database: - ~/.codex/logs_2.sqlite - ~/.codex/logs_2.sqlite-wal - ~/.codex/logs_2.sqlite-shm On my machine, after about 21 days of uptime, the main SSD has written about 37 TB. Process/file-level checks show Codex SQLite logs are the main continuous writer. That extrapolates to roughly 640 TB/year.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>On a 1 TB SSD, that is about 640 full-drive writes per year.</li><li>Some consumer SSDs are rated around 600 TBW, so this could consume roughly a full drive&#x27;s warranted write endurance in less than a year.</li><li>Evidence Current retained rows in logs_2.sqlite: | metric | value | | retained rows | 681,774 | | estimated retained log content | 1,035.6 MiB | Level distribution: | level | estimated MiB | byte % | | TRACE | 732.5 | 70.7% | | INFO | 266.5 | 25.7% | | DEBUG | 30.6 | 3.0% | | WARN | 5.9 | 0.6% | Largest target+level pairs: | target | level | estimated MiB | | codex_api::endpoint::responses_websocket | TRACE | 527.4 | | codex_otel.log_only | INFO | 141.2 | | codex_otel.trace_safe | INFO | 121.2 | | log | TRACE | 97.4 | | codex_client::transport | TRACE | 60.1 | | codex_core::stream_events_utils | DEBUG | 27.5 | | codex_api::sse::responses | TRACE | 19.1 | The top sources are mostly global TRACE logs, mirrored telemetry logs, and raw websocket/SSE payload logging.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
