@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>TurboKV: Insanely fast Rust key-value store</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>TurboKV: Insanely fast Rust key-value store</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #10 · HN score 158 · 2026-08-29 02:23 UTC</p>
+      <div class='actions'><a href='https://github.com/kingroryg/turbokv' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>TurboKV is an async embedded key-value database with atomic batches, ordered range scans, configurable durability, compression, and background compaction. cargo add turbokv cargo add tokio --features full Or add the dependencies directly: [dependencies] turbokv = &quot;0.6&quot; tokio = { version = &quot;1&quot;, features = [&quot;full&quot;] } TurboKV&#x27;s persisted Bloom-filter format uses hardware AES. Build x86/x86_64 targets with RUSTFLAGS=&quot;-C target-feature=+aes,+sse2&quot;, and ARM/AArch64 targets with RUSTFLAGS=&quot;-C target-feature=+aes,+neon&quot;.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>You may instead use -C target-cpu=native when the binary will run only on the same CPU model or a feature superset.</li><li>use turbokv::{Db, DbOptions, WriteBatch}; #[tokio::main] async fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; { let db = Db::open_with_options(&quot;./my-database&quot;, DbOptions::durable()).await?; db.insert(b&quot;user:1&quot;, b&quot;Ada&quot;).await?; assert_eq!(db.get(b&quot;user:1&quot;).await?, Some(b&quot;Ada&quot;.to_vec())); let mut batch = WriteBatch::new(); batch.put(b&quot;user:2&quot;, b&quot;Grace&quot;); batch.put(b&quot;user:3&quot;, b&quot;Linus&quot;); batch.delete(b&quot;user:1&quot;); db.write_batch(&amp;batch).await?; for (key, value) in db.scan_prefix(b&quot;user:&quot;).await?</li><li>{ println!( &quot;{} = {}&quot;, String::from_utf8_lossy(&amp;key), String::from_utf8_lossy(&amp;value) ); } db.close().await?; Ok(()) } Runnable examples: - basic : insert, get, update, and remove - batch_writes : atomic puts and deletes - range_queries : ordered range and prefix scans - concurrent : shared access from Tokio tasks - persistence : paranoid WAL recovery - configuration : cache, memtable, and compression options | Preset | Acknowledgement boundary | Use case | |---|---|---| | DbOptions::fast() | In-memory visibility; no WAL | Caches and reproducible data | | DbOptions::durable() | Appended to the WAL without a per-write sync | Process-crash recovery with periodic power-loss checkpoints; recommended default | | DbOptions::paranoid() | WAL group completed sync_all before return | Strongest mode, subject to filesystem/device guarantees | Durable does not leave the WAL unsynchronized forever.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
