@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Revo Programming language</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Revo Programming language</h1>
+      <p class='meta'><span class='badge'>Lobsters</span>Rank #3 · RSS curated source · 2026-09-03 08:21 UTC</p>
+      <div class='actions'><a href='https://revo.lung.fyi/' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>revo, the programming language revo is a dynamic language made for the joy of programming get, try in your browser, join the discord or read the introduction with words ⣄⠔⠄⡨⣀⣹⣥⣣⡚⣿⣓⣾⣫⣷⠮⡧⣬⣬⣑⢤⠤⡉⣿⡥⣂⢟⣕⡴⠬⠆⠸⡈⡆⠀⠀⠀⡋⠄⠂⠨⡆⠀⠠⠃⡀⠀⠀⠈⢰⣿ ⠩⣽⢟⢭⠶⢷⢵⣻⠿⢍⣟⡅⡧⡭⣽⡯⡯⣶⠭⣽⡢⠱⢿⢧⠓⢥⠨⠧⠉⣡⠐⠀⢑⣀⠂⠈⠆⡅⠀⡀⢥⠤⢁⠀⢣⠀⠀⢘⠽⡏ ⠬⡓⣼⢟⢜⡧⣷⣇⣧⡷⢯⣿⣿⣿⡶⣭⠍⣯⣻⢥⠞⣮⣬⣩⠅⢏⠆⠁⡀⠌⢩⡁⢁⠅⠡⢀⠠⠀⢉⢈⠀⠀⡅⠀⡇⠀⠀⠃⠭⣯ ⡎⣟⣵⠅⣾⢭⣿⣾⣯⣿⣿⢿⣿⣿⣿⣿⣧⡳⣥⢜⣟⡤⠉⣁⢧⢨⠌⡂⠀⠒⠬⡪⣊⠄⠀⠘⠀⠢⡁⠀⡀⠅⠅⠀⡄⠀⠈⠀⢕⡟ ⡕⣧⡗⠎⠷⣯⣿⣿⣷⣿⡻⢵⣿⣿⣿⣭⣿⡿⣟⣇⡧⣿⡭⢨⠫⠮⠄⠖⠀⠆⠦⠕⠁⠅⠀⠆⡁⠁⡀⠀⠄⡉⠁⠀⠄⡀⡂⠀⢼⣇ ⠃⣶⣯⠢⡗⣟⣿⡿⣿⣯⢿⣷⢾⢿⣛⣿⣿⣯⡻⣾⡾⣾⢵⣏⣩⠅⠅⠥⠀⠃⠠⠅⠃⠀⡈⠀⠭⠅⠀⠀⠁⠔⠀⠀⢂⠅⠅⠀⠽⡇ ⠱⣻⣻⡥⢫⢯⢿⣷⣷⣿⣿⢾⢿⣷⢯⣉⣟⣟⣾⣿⠳⣿⣇⣃⠯⠘⠔⡇⠒⠅⡖⠁⠄⠡⠑⣀⠀⡁⠀⡀⠃⠈⠀⠀⠅⠀⠀⠂⣋⡇ ⢂⠵⣓⣿⣍⢯⢯⡯⣟⣝⠷⣟⢝⣋⡏⣧⠯⣿⣿⢯⣼⣯⡂⡂⣟⡧⠐⣅⠂⠥⠏⠀⠂⡅⠅⡁⠁⠄⠠⠊⠀⠨⠀⢈⠀⠄⠉⢘⡟⡆ ⡥⣯⢌⡤⢽⣗⣏⠗⢿⣻⡭⡞⡷⣭⢿⡻⡯⡟⣕⣾⢽⢯⡭⠂⡍⠀⠏⠀⢌⠴⠂⠊⡄⢗⠂⠰⠀⠤⠣⠀⠀⠀⠁⠀⠀⠀⠅⠀⢕⡽ ⠵⡭⡩⠋⠽⣽⡛⡹⢯⠍⡛⡏⣯⢟⠟⠿⣩⣳⡿⡟⢗⣭⡤⡯⠁⡬⠠⠂⢄⠂⢤⠀⢖⠀⠀⢀⠂⢖⠀⠘⠀⠀⠂⠡⢤⠠⠀⠀⣫⡿ ⠀⢰⡇⢂⣃⠙⣧⡵⡙⠇⡷⠶⡷⠶⡟⡙⣩⡌⠯⡺⡍⡲⡸⣆⠼⠅⡱⠌⠡⠂⢄⣠⠃⠀⠀⡂⠈⠂⠠⢀⠀⠀⠀⠔⠀⠂⠂⠀⠨⣯ ⡔⠰⠼⣝⢪⢋⢋⠣⣧⡦⣦⡁⡭⠽⡛⠁⡫⢡⡄⠿⡫⣕⣔⢳⠌⢡⡸⠁⠁⠂⣠⡇⠀⠀⠀⠍⠈⠄⠀⠀⢀⠀⠔⠆⠁⠈⠠⠀⡹⡏ ⡖⣠⠄⠀⠯⢜⢨⠊⣒⢡⠨⡀⠢⢭⠴⡊⢕⠐⣄⡓⡾⠋⠗⠉⢀⠚⠀⢃⠂⠥⠲⠀⠀⠀⠄⠐⠀⠀⠐⠀⠁⠄⠱⠁⠊⠈⡀⠀⠊⣽ ⠀⡉⠒⣃⠰⡀⢁⠘⡉⠪⠋⡲⡅⠍⡎⡪⢣⠽⢭⠍⡥⠁⠂⡰⠠⣄⠥⠐⠀⠣⠄⢀⠐⠁⡀⠀⢐⠐⠀⠠⠁⠂⠄⠠⠀⠁⡀⠐⣫⡟ ⠐⢔⠁⠀⠬⠑⠗⠴⠀⠢⡁⢌⠅⢘⠓⡛⠈⡀⠄⠆⠠⠠⠢⢂⠕⠷⠈⢀⠈⡒⠄⠂⠀⠀⠈⠀⡀⠡⠈⠀⠆⡐⠀⠀⠓⠀⠀⠀⢐⢼ ⡀⠀⠈⠐⠠⠀⠀⠁⠁⠣⢀⡁⡄⠂⠔⠂⠂⢉⠁⡌⠄⠜⠈⠡⠐⠀⡐⠀⢨⠀⠁⠀⠀⡀⠍⠄⠠⠁⠀⠠⢄⠈⠀⠀⡄⠀⠀⡀⠒⣸ ⢘⠉⡒⠤⠌⢀⠑⠕⠀⠄⠄⠄⠀⠄⠑⠉⠨⠀⠄⠀⠂⠃⠀⠀⠈⠄⠄⠠⠈⠀⠀⡀⠠⠁⢠⠁⠁⠀⠐⠱⠀⠀⠀⡐⠀⠉⠄⠀⢸⠾ ⠀⠘⠈⡀⠈⠀⠈⠨⠐⠠⠠⠐⡀⡄⢠⠀⢀⠨⠀⠃⠀⠀⡁⡠⠀⠩⠀⠂⠁⠀⠀⠀⢒⡄⠊⠀⠀⢀⠈⠁⠀⠀⠀⠆⠘⠁⠄⠀⠄⣿ ⠄⡄⠀⠈⠠⠀⡀⠀⠀⠄⠀⠂⠀⠀⠄⠀⢀⠁⠁⢁⠁⠆⠀⠀⠀⠀⡀⠀⠈⠀⡀⠀⠱⠀⠀⠀⠀⠂⢄⠈⠀⠀⡀⡨⠠⡀⠠⠀⠄⡼ ⠠⠀⠁⠊⢀⠀⠠⠁⠁⠂⠂⡄⢄⠐⡀⢀⠊⠂⡀⡁⡀⢀⢀⠠⠀⠄⠂⠡⠠⠁⠀⠀⠀⠂⠀⢠⠒⠀⠀⠀⠐⠢⠀⢀⠀⠀⠄⠄⣿⣿ ⠁⠋⠙⠊⠐⠕⠁⡂⠈⠅⠠⠈⠐⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠀⠉⠀⠐⠀⠀⠀⠀⠀⣈⠀⠀⠀⠀⠈⡂⠈⠀⠀⠘⠌⢀⠥ ⠀⠀⠀⠀⠔⠔⠀⡀⡉⠀⠀⠀⠂⠠⠠⠀⠄⠄⠀⣀⢀⠀⡈⠀⠌⡐⠈⠈⠀⠀⠀⠀⠅⠀⣐⠉⠄⠀⠀⣂⠠⠁⡈⠀⠄⠄⢀⠣⢶⢿ ⠄⠀⠀⡁⠀⠄⠀⠀⠁⠈⠀⠈⠀⠁⠀⠁⡀⠁⠀⠁⠀⠀⠀⡀⠀⠀⠀⠀⠀⠠⡀⠑⠀⠀⠎⠀⢬⢠⠀⢂⠠⠢⠠⠈⡐⠸⠀⡐⣹⢷ ⠩⠥⠂⠆⡆⢠⠀⢄⠀⣀⡀⣄⠀⢈⠀⠀⣀⡀⡀⡀⠄⡄⠡⠀⠐⠀⠑⠀⠀⠁⠒⠒⠉⠡⡀⠈⠈⢀⠥⠈⠀⠀⠀⠀⠈⣞⣏⣿⡏⣿ ⠾⠝⠷⢿⣯⣿⠧⡧⠭⠣⠭⡭⡮⢭⠶⠶⠶⠦⣗⡶⠽⠭⣿⣶⠷⠵⠮⠽⠿⠮⠿⢷⡶⣖⡷⠲⠞⠷⠾⢿⢷⣿⣿⣿⣿⣯⢇⠟⡧⢈ pipes clean data flow without nesting things flow from top to bottom errors-as-values nil and booleans are replaced by atoms you can’t use a value without handling an error all crashes are explicit (WIP) aided massively by pattern matching, ?, orelse, and :unwrap() everything is an expression no statements, everything (really) always returns a value …but the code still looks procedural comp execute any (really) expression at compile time any script can be compiled into bytecode and get any value baked in revo compile script.rv revo script.rvo the compile-time VM does not differ from the runtime one procedural macros along with an AST-substituting macro system, this lets you just get an iterator over the raw ast tokens, run any code to transform them , then return back a table of the new ast pattern matching destructure and branch in place you will be using atoms and tuples, they are beautiful solutions to their problems fibers i made all your blocking code become non-blocking by just adding a spawn before it tables represent everything used for - module exports - arrays - maps convenient typing the type system is optional, but very well-integrated untyped code works just fine, but typed code is faster and gets optimized better (and ensures code correctness at compile-time!) most of your code is going to be inferred automatically first-class tests they’re just closures and they fail when you return an error. postfix operator propagates errors, giving you a pretty simple experience get the latest release is hosted at github releases however, this project is rapidly changing. i recommend you build from source instead install from source you need zig 0.16.0 to build revo.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>i also recommend the anyzig version manager linux/bsd/mac/etc git clone https://github.com/if-not-nil/revo --recursive &amp;&amp; cd revo git submodule update --init --recursive zig build --fetch zig build -Doptimize=ReleaseSafe # =ReleaseSmall for a ~1mb executable # =ReleaseFast for a ~5%-10% performance gain (harder to report bugs on) cp ./zig-out/bin/revo ~/.local/bin/revo revo windows [!NOTE] some features are unavailable on windows.</li><li>i recommend using WSL with the steps above git clone https://github.com/if-not-nil/revo &amp;&amp; cd revo zig build --fetch -Doptimize=ReleaseFast mkdir &quot;C:/tools/revo/bin&quot; copy ./zig-out/bin/revo C:/tools/revo/bin # now add it to PATH by doing: # - Win+S -&gt; `env` -&gt; &lt;Enter&gt; -&gt; &quot;Environment Variables&quot; -&gt; &quot;Path&quot; -&gt; &quot;System Variables&quot; # - add new at &quot;C:\tools\revo\bin&quot; -&gt; click ok -&gt; reopen your terminal revo tools - lspdiagnostics, highlighting, etc.</li><li>bundled by default with your revo how to use in your text editor - tree-sittergives most editors revo syntax highlighting support doomy/tree-sitter-revo on codeberg - docsoutput docs in plaintext/html revo doc &lt;file or directory&gt; revo doc --html &lt;file or directory&gt; editors made with revo - if you want to feature your project on the readme, you can submit a project via issues/email/discord in c/zig/odin/what have you you can extend revo in (essentially) any language or embed it from any language there are two apis: credits revo is licensed as MIT ~ isocline by daanx - MIT ~ lsp-kit by the zigtools team - MIT</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
