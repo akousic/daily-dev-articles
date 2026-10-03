@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Kolibri is an open-weight LLM from Aleph Alpha for German and English</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Kolibri is an open-weight LLM from Aleph Alpha for German and English</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #1 · HN score 395 · 2026-10-03 10:43 UTC</p>
+      <div class='actions'><a href='https://tej.as/blog/aleph-alpha-kolibri' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Aleph Alpha Kolibri: How the Sovereign German LLM Works Kolibri is an open-weight large language model (LLM) from Aleph Alpha for German and English: a mixture of experts with 78 billion parameters that only uses about 3.5 billion of them for each token it reads or writes. It came out on 3 October 2026 under the Apache 2.0 license, the weights are on Hugging Face, and it was trained from scratch on infrastructure in Germany and Finland. (Kolibri is German for hummingbird, which is cute for a model whose whole trick is being light.) I live in Germany, and at SmashingConf New York in 2024 I told the room what I’d heard in the US when I said where I’m based: “you regulate, you don’t innovate.” It hurt to hear, and what I wished for on that stage was the middle, “the right balance between innovation and regulation around data privacy, data stewardship, environmental constraints and energy requirements.” Kolibri is a pretty direct answer to that: a German team built it with the EU AI Act in mind “from the ground up”, and in Aleph Alpha’s own evaluation it scores above every compared model of its size in both languages.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>Huge congrats to everyone at Aleph Alpha who built it, my good friend Michael Hofmann among them!</li><li>This post is about how Kolibri works, where it’s strong, where it isn’t, how to run it, and when it’s the right pick.</li><li>Everything here comes from Aleph Alpha’s 189 page technical report, the model card and their launch post, plus one experiment I ran on its tokenizer.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
