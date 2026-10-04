@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Rust&#x27;s derive often implies inline</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Rust&#x27;s derive often implies inline</h1>
+      <p class='meta'><span class='badge'>Lobsters</span>Rank #3 · RSS curated source · 2026-10-03 20:41 UTC</p>
+      <div class='actions'><a href='https://yossarian.net/til/post/rust-s-derive-often-implies-inline/' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>In Rust, one of the most common ways to implement core traits (like Debug, Display, and Clone) is to #[derive(...)] them, e.g.: #[derive(Debug)] struct Widgets { foo: u32, bar: usize, } What I didn&#x27;t know until recently is that Rust currently emits #[inline] as part of these derivations. This is seemingly not guaranteed, but is implied by example in the reference and can also be seen if one expands the macros. Using the example above, this is what you get when you expand the #[derive(Debug)] in the playground: struct Widgets { foo: u32, bar: usize, } #[automatically_derived] impl ::core::fmt::Debug for Widgets { #[inline] fn fmt(&amp;self, f: &amp;mut ::core::fmt::Formatter) -&gt; ::core::fmt::Result { ::core::fmt::Formatter::debug_struct_field2_finish(f, &quot;Widgets&quot;, &quot;foo&quot;, &amp;self.foo, &quot;bar&quot;, &amp;&amp;self.bar) } } This is almost always what we want: #[inline] is just a hint, and typical derived Debug, Clone, etc.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>implementations benefit from being inlined (since they&#x27;re often trivial).</li><li>Imagine an error hierarchy like this: #[derive(Debug)] struct ErrorA { lots: String, of: String, chunky: String, fields: String, within: String, this: String, r#type: String, } #[derive(Debug)] struct ErrorB { inner: ErrorA, } #[derive(Debug)] struct ErrorC { inner: ErrorB, } #[derive(Debug)] enum Errors { A(ErrorA), B(ErrorB), C(ErrorC), } produces: struct ErrorA { lots: String, of: String, chunky: String, fields: String, within: String, this: String, r#type: String, } #[automatically_derived] impl ::core::fmt::Debug for ErrorA { #[inline] fn fmt(&amp;self, f: &amp;mut ::core::fmt::Formatter) -&gt; ::core::fmt::Result { let names: &amp;&#x27;static _ = &amp;[&quot;lots&quot;, &quot;of&quot;, &quot;chunky&quot;, &quot;fields&quot;, &quot;within&quot;, &quot;this&quot;, &quot;type&quot;]; let values: &amp;[&amp;dyn ::core::fmt::Debug] = &amp;[&amp;self.lots, &amp;self.of, &amp;self.chunky, &amp;self.fields, &amp;self.within, &amp;self.this, &amp;&amp;self.r#type]; ::core::fmt::Formatter::debug_struct_fields_finish(f, &quot;ErrorA&quot;, names, values) } } #[automatically_derived] impl ::core::default::Default for ErrorA { #[inline] fn default() -&gt; Self { Self { lots: ::core::default::Default::default(), of: ::core::default::Default::default(), chunky: ::core::default::Default::default(), fields: ::core::default::Default::default(), within: ::core::default::Default::default(), this: ::core::default::Default::default(), r#type: ::core::default::Default::default(), } } } struct ErrorB { inner: ErrorA, } #[automatically_derived] impl ::core::fmt::Debug for ErrorB { #[inline] fn fmt(&amp;self, f: &amp;mut ::core::fmt::Formatter) -&gt; ::core::fmt::Result { ::core::fmt::Formatter::debug_struct_field1_finish(f, &quot;ErrorB&quot;, &quot;inner&quot;, &amp;&amp;self.inner) } } struct ErrorC { inner: ErrorB, } #[automatically_derived] impl ::core::fmt::Debug for ErrorC { #[inline] fn fmt(&amp;self, f: &amp;mut ::core::fmt::Formatter) -&gt; ::core::fmt::Result { ::core::fmt::Formatter::debug_struct_field1_finish(f, &quot;ErrorC&quot;, &quot;inner&quot;, &amp;&amp;self.inner) } } enum Errors { A(ErrorA), B(ErrorB), C(ErrorC), } #[automatically_derived] impl ::core::fmt::Debug for Errors { #[inline] fn fmt(&amp;self, f: &amp;mut ::core::fmt::Formatter) -&gt; ::core::fmt::Result { match self { Self::A(__self_0) =&gt; ::core::fmt::Formatter::debug_tuple_field1_finish(f, &quot;A&quot;, &amp;__self_0), Self::B(__self_0) =&gt; ::core::fmt::Formatter::debug_tuple_field1_finish(f, &quot;B&quot;, &amp;__self_0), Self::C(__self_0) =&gt; ::core::fmt::Formatter::debug_tuple_field1_finish(f, &quot;C&quot;, &amp;__self_0), } } } That&#x27;s a lot of code that can get inlined for each invocation of the Debug implementation of Errors, which can occur repeatedly in e.g.</li><li>debug or trace logging.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
