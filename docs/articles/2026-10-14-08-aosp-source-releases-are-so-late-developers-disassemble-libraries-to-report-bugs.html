@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>AOSP Source Releases Are So Late Developers Disassemble Libraries to Report Bugs</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>AOSP Source Releases Are So Late Developers Disassemble Libraries to Report Bugs</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #8 · HN score 462 · 2026-10-14 06:18 UTC</p>
+      <div class='actions'><a href='https://github.com/android/ndk/issues/2260' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Repository navigation [BUG] bionic: wcscspn()/wcspbrk() treat every wchar_t &gt;= 0x100 as a match (Android 17, CP3A.260905.009) #2260 Description Description On Android 17 builds from September 2026, wcscspn() and wcspbrk() stop at the first character of the string that is &gt;= U+0100 whenever the reject set has two or more characters that are all &lt; U+0100. The character is reported as a match even though it is not in the set. wcsspn(), wcschr(), wcsrchr(), wmemchr() and wcsstr() are correct.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>Any code that scans wide strings for ASCII delimiters, for example newline or wildcard characters, breaks as soon as the text contains an emoji, CJK, Cyrillic, Greek or Latin Extended character.</li><li>Affected / unaffected | Device | Build | Result | |---|---|---| | Pixel 7 | google/panther/panther:17/CP3A.260905.009/16091614:user/release-keys | broken | | Pixel 8a | google/akita/akita:17/CP3A.260905.009/16091614:user/release-keys (patch 2026-09-05) | broken | | Nothing Phone 2 | Nothing/PongEEA/Pong:16/BQ2A.250721.001-BP2A.250605.031.A3 (patch 2026-08-01) | ok | The public android17-release sources (android-17.0.0_r1, June 2026) build wcscspn/wcspbrk from external/llvm-libc, which is a plain nested loop over wchar_t and is correct.</li><li>The code on the September builds is different (see &quot;Mechanism&quot;), so the regression was introduced between the June and September releases.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
