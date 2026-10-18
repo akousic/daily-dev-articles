@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Show HN: Esp32sim – Run ESP32 firmware in the browser</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Show HN: Esp32sim – Run ESP32 firmware in the browser</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #8 · HN score 188 · 2026-10-17 13:51 UTC</p>
+      <div class='actions'><a href='https://github.com/mikroverk/esp32sim' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Instruction-level emulation of four ESP32 SoCs, across both of Espressif&#x27;s CPU architectures. Each boots the real mask ROM, the real 2nd-stage bootloader and an unmodified application image — no patched firmware, no stubs in the way — with enough of the SoC modelled to run real projects end to end. No cloud, no accounts.</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>The classic ESP32 also boots its ECO3 ROM on dual LX6 cores, with GPIO, UART and timers; --board ttgo-tdisplay adds the LilyGO TTGO T-Display&#x27;s ST7789 and buttons.</li><li>| | ESP32-S3 | ESP32-C3 | ESP32-C6 | |---|---|---|---| | CPU | 2 × Xtensa LX7 @ 240 MHz | 1 × RISC-V RV32IMC @ 160 MHz | 1 × RISC-V RV32IMAC @ 160 MHz | | Command | esp32sim | esp32sim-c3 | esp32sim-c6 | | Core crate | xtensa-lx7 | riscv-rv32 | riscv-rv32 (+ the A extension) | | Reported full-listing decoder checks | 977 k instructions, 0 mismatches | 161 k instructions, 0 mismatches | 126 k instructions, 0 mismatches | | Boots | ROM → bootloader → FreeRTOS → app | ROM → bootloader → FreeRTOS → app | ROM → bootloader → FreeRTOS → app | | Boards / displays | ST7735, ST7701S 480×480 + touch, WS2812, camera, audio | none — console only | ST7789 172×320 over SPI+DMA, WS2812, an 802.15.4 energy-detect stand-in | | WiFi | virtual AP, WPA2, DHCP/DNS/NTP, NAT to the real network, HTTPS | the same virtual AP and network: scan, WPA2, DHCP, NAT (one station) | the same virtual AP and network: scan, WPA2, DHCP, NAT (one station, legacy rates) | | Speed | block interpreter + AArch64 JIT, ~150–240 Minsn/s | plain interpreter (no block cache or JIT yet) — still well above real time on hello_world | same interpreter | | In the browser | yes (WebAssembly) | yes (WebAssembly) | yes (WebAssembly) | | Reported hardware comparisons | JTAG trace, 8000 steps after timing-loop resynchronization | console diff, 205/208 lines identical | console diff, 203/204 lines identical | | Status | mature | draft — see docs/esp32c3.md | draft — see docs/esp32c6.md | These full-listing and hardware counts describe earlier manual runs.</li><li>CI runs the checked-in sampled decoder corpora and emulator golden outputs; it excludes the external full-listing tests.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
