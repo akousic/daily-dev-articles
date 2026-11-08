@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU</title><style>
+:root { --bg:#f5f7fb; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#3b82f6; --brand2:#8b5cf6; }
+@media (prefers-color-scheme: dark){ :root { --bg:#0b1020; --panel:#11172a; --text:#e2e8f0; --muted:#94a3b8; --line:#24324a; --brand:#60a5fa; --brand2:#a78bfa; } }
+*{ box-sizing:border-box; }
+body { margin:0; background:linear-gradient(180deg,var(--bg),var(--bg)); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height:1.6; }
+.wrap{ max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:10px 0 16px; border-bottom:1px solid var(--line); }
+.brand{ font-weight:800; letter-spacing:.2px; color:var(--text); text-decoration:none; }
+.sub{ color:var(--muted); font-size:14px; }
+.hero{ margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(120deg, color-mix(in srgb, var(--brand) 12%, var(--panel)), color-mix(in srgb, var(--brand2) 12%, var(--panel))); }
+.hero h1{ margin:0 0 8px; font-size:34px; line-height:1.2; }
+.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+.card{ border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.card h2{ margin:0 0 6px; font-size:21px; line-height:1.3; }
+.meta{ color:var(--muted); font-size:13px; }
+.excerpt{ margin:10px 0 12px; color:var(--text); }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+.badge{ display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-right:8px; background:color-mix(in srgb, var(--panel) 80%, var(--brand) 20%); }
+.actions{ display:flex; gap:14px; font-size:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+.back{ font-size:14px; color:var(--muted); }
+</style></head><body><div class='wrap'>
+    <div class='topbar'><a class='brand' href='../index.html'>Daily Dev Articles</a><span class='sub'>Curated daily software reading</span></div>
+    <div class='hero'>
+      <a class='back' href='../index.html'>← Back to all digests</a>
+      <h1>Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU</h1>
+      <p class='meta'><span class='badge'>Hacker News</span>Rank #9 · HN score 251 · 2026-11-08 10:22 UTC</p>
+      <div class='actions'><a href='https://github.com/synchopate/llama-modchip' target='_blank' rel='noopener'>Open original article ↗</a></div>
+    </div>
+    <div class='card'>
+      <h2>Summary</h2>
+      <p class='excerpt'>Break the 64 GB RAM Wall: Run 284B DeepSeek-V4-Flash (&lt; 59 GiB RAM) &amp; 30B MoEs (up to 111 tok/s) at 256K Context on Pure CPU — Zero GPUs Required. ⚡ Quickstart · 🧩 Supported Models · 🖥️ Supported Chips &amp; Platforms · 🏆 Leaderboard · 📄 Preprint PDF (paper/) · 📐 Architecture · ❓ FAQ | 284.33B Frontier MoE params | 56.56 GiB checkpoint on disk | 57.61 GiB peak VmRSS @ 256K ctx | 44.36 tok/s 284B CPU prefill | 60.4–111.6 tok/s 30B MoE CPU decode | 13.1 ms Claude Code restore | 0 GPUs required | Real-time Frontier &amp; Agentic MoE inference on the CPU workstation you already own — 100% in RAM, zero NVMe swap: | the machine you have | RAM | recommended model | speed (0 GPUs) | what is going on | |---|---|---|---|---| | a developer laptop / mini-PC | 16–32 GB | Nemotron-3.5-30B-A3B ( 14.35 GiB) | 25.0–60.4 tok/s | 46 Mamba-2 SSM layers + 1.64 MB L3 Stockfish-PVS drafter; 256K ctx in 6 GiB KV | | a 64 GB desktop / server | 64 GB | DeepSeek-V4-Flash 284B ( 56.56 GiB) | 44.4 tok/s pp · 9.1–14.7 tok/s tg | SwiGLU-H2 shaves 20.31 GiB; entire 284B model + 256K ctx sits in RAM (57.61 GiB VmRSS) | | a hybrid desktop (CPU + 16 GB GPU) | 32–64 GB | Nemotron-30B / Qwen3-30B | 80.80 tok/s | hot attention trunk on GPU ( -ngl 99), cold routed MoE experts in CPU DDR5 | | an 8-channel workstation (Threadripper) | 128 GB+ | DeepSeek-284B / Nemotron-30B | 111.62 tok/s (30B) | 8-CCD AVX-512BW _1x8 register tiling saturates 8-channel DDR5 memory bandwidth | TL;DR — The 3 Paradigm-Breaking Pillars of llama-modchip: - 🐋 284.33B Frontier MoE in a 64 GB CPU Box: Shrinks DeepSeek-V4-Flash from 76.87 GiB (which crashes in OOM on 64 GB Linux) down to 56.56 GiB on disk / 57.61–58.9 GiB VmRSS at full 256K context (44.36 tok/s prefill, 9.06–10.74 tok/s pure CPU decode, 11.5–14.7 tok/s with PVS) using closed-form Analytical SwiGLU-H2 Second-Order Hessian Compression + Fractal-64 (Q2_0, 3.75 bpw) MLA transcoding + 4-Level Register (ZMM AVX-512BW) + L1D (32 KB) + L2 (1 MB) + L3 (64 MB) Whole-Model Tiling +$L_2$ -Quadrature MoE Pruning. - ⚡ 30B MoE at GPU Speeds on Pure CPU: Runs NVIDIA-Nemotron-3.5-30B-A3B in 14.35 GiB at 25.0–60.4 tok/s on 16-core Zen 5 (111.6 tok/s on Threadripper, 80.8 tok/s on AMD Vulkan Hybrid, 44.97 tok/s on AWS Graviton3 ARM64) via a 1.64 MB Stockfish-PVS v2 + RouteCrack L2/L3 Drafter (96.4% acceptance) and _MM_HINT_NTA L3 cache isolation (HARPCache).</p>
+      <h2>Key Takeaways</h2>
+      <ul><li>- 🤖 Zero-API Claude Code (./modchip claude): Eliminates the 45-second CPU agent prompt re-evaluation bottleneck via /dev/shm Slot-0 KV Warm Restore (18.9 ms on Nemotron-30B / 13.1–32.6 ms on DeepSeek-284B) with all 40 Claude Code tools active.</li><li>git clone https://github.com/synchopate/llama-modchip.git cd llama-modchip ./modchip chat ⚠️ Important Compatibility Note (GGML_TYPE_Q2_0 = 40): Our Fractal-64 models use custom block-64 BF16-scale Gray-coded tensors (GGML_TYPE_Q2_0, type ID 40) and custom deepseek4 / Stockfish-PVS kernels.</li><li>Opening them in unpatched llama.cpp, Ollama, or LM Studio will fail with unknown tensor type 40.</li></ul>
+    </div>
+    <footer>Auto-generated daily digest entry.</footer>
+    </div></body></html>
