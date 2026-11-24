@@ -2,7 +2,7 @@
 
 - **Source:** Hacker News
 - **Rank (today):** #1
-- **Ranking metrics:** HN score 1051
+- **Ranking metrics:** HN score 1161
 - **Published (UTC):** 2026-11-23 10:06
 - **Original:** https://z.ai/blog/glm-5.4
 

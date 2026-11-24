@@ -2,7 +2,7 @@
 
 - **Source:** Dev.to
 - **Rank (today):** #5
-- **Ranking metrics:** reactions 96, comments 36
+- **Ranking metrics:** reactions 133, comments 66
 - **Published (UTC):** 2026-11-23 14:42
 - **Original:** https://dev.to/francistrdev/what-are-you-grateful-for-this-thanksgiving-4570
 

@@ -2,7 +2,7 @@
 
 - **Source:** Dev.to
 - **Rank (today):** #4
-- **Ranking metrics:** reactions 254, comments 247
+- **Ranking metrics:** reactions 254, comments 251
 - **Published (UTC):** 2026-11-18 08:32
 - **Original:** https://dev.to/sylwia-lask/is-coding-with-ai-actually-faster-and-cheaper-2810
 
